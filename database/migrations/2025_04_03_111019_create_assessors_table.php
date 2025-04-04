@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('religion');
             $table->foreignId('village_id')->constrained('villages')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('telp');
-            $table->string('email');
+            $table->string('email_assessor');
             $table->text('address');
             $table->string('image');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
