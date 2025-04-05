@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\AssessorResource\Pages;
+namespace App\Filament\Resources\AdminResource\Pages;
 
 use App\Models\User;
 use Filament\Actions;
+use App\Filament\Resources\AdminResource;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\Resources\AssessorResource;
 
-class CreateAssessor extends CreateRecord
+class CreateAdmin extends CreateRecord
 {
-    protected static string $resource = AssessorResource::class;
-
+    protected static string $resource = AdminResource::class;
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $formData = $this->form->getState();
@@ -18,7 +17,7 @@ class CreateAssessor extends CreateRecord
        $saveUser=User::create([
             'name' => $formData['name'],
             'username' => $formData['username'],
-            'email' => $formData['email_assessor'],
+            'email' => $formData['email'],
             'password' => $formData['password'],
         ]);
 
@@ -26,8 +25,4 @@ class CreateAssessor extends CreateRecord
 
     return $formData;
     }
-
-
-
-
 }
