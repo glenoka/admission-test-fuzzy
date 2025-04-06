@@ -52,9 +52,12 @@ class AssessorResource extends Resource
                         ->live()
                         ->afterStateHydrated(function (Set $set, ?string $state) {
                             $dataUser=user::find($state);
-                            $set('email', $dataUser->email);
-                            $set('username', $dataUser->username);
-                            $set('user.name', $dataUser->name);
+                            if($dataUser){
+
+                                $set('email', $dataUser->email);
+                                $set('username', $dataUser->username);
+                                $set('user.name', $dataUser->name);
+                            }
 
                         }),
                         TextInput::make('place_of_birth'),
@@ -92,7 +95,7 @@ class AssessorResource extends Resource
                             ->default('active')
                             ->disabled(),
                         FileUpload::make('image')->image()->directory('assessor')->columnSpanFull(),
-                        
+
                     ])->columns(2),
                 Section::make('Data User')
                     // Menghapus relationship karena akan dihandle manual
@@ -115,7 +118,7 @@ class AssessorResource extends Resource
             ]);
     }
 
-    
+
 
     public static function table(Table $table): Table
     {

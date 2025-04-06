@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
@@ -145,7 +147,11 @@ class ParticipantResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name'),
+            TextColumn::make('email'),
+            TextColumn::make('telp'),
+            TextColumn::make('status'),
+            ImageColumn::make('image'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

@@ -2,16 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ExamResource\Pages;
-use App\Filament\Resources\ExamResource\RelationManagers;
-use App\Models\Exam;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Exam;
 use Filament\Tables;
+use App\Models\Package;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ExamResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ExamResource\RelationManagers;
 
 class ExamResource extends Resource
 {
@@ -23,6 +28,26 @@ class ExamResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('participant_id')
+                    ->label('Select Participant')
+                    ->searchable()
+                    ->relationship('participant', 'name'),
+                Select::make('assessor_id')
+                    ->label('Select Assessor')
+                    ->relationship('assessor', 'name'),
+                Select::make('package_id')
+                    ->label('Select Package')
+                    ->relationship('package', 'name')
+                    ->live()
+                    ->afterStateUpdated(function (Set $set, ?string $state) {
+                        if ($state) {
+
+                            $package = Package::find($state);
+                            $set('duration', $package->duration);
+                        }
+                    }),
+                TextInput::make('duration'),
+
 
             ]);
     }
@@ -31,7 +56,13 @@ class ExamResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('participant.name'),
+                TextColumn::make('assessor.name'),
+                TextColumn::make('package.name'),
+                TextColumn::make('started_at')
+                ->default('Not Started'), 
+
+                    
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
