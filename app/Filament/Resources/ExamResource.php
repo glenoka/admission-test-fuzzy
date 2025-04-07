@@ -9,6 +9,7 @@ use App\Models\Package;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
@@ -23,7 +24,7 @@ class ExamResource extends Resource
     protected static ?string $model = Exam::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    
+
     public static function form(Form $form): Form
     {
         return $form
@@ -60,15 +61,21 @@ class ExamResource extends Resource
                 TextColumn::make('assessor.name'),
                 TextColumn::make('package.name'),
                 TextColumn::make('started_at')
-                ->default('Not Started'), 
+                ->default('Not Started'),
 
-                    
+
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('start_test')
+                ->label('Started')
+                ->icon('heroicon-o-play')
+                ->color('success')
+                ->url(fn ($record) => route('do-tryout', $record))
+                ->openUrlInNewTab()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
