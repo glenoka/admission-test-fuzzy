@@ -6,7 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tryouts</title>
 
-    <!-- Bootstrap CSS -->
+<style>
+    .btn-outline-primary {
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+}
+</style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
