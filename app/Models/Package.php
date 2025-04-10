@@ -16,6 +16,7 @@ class Package extends Model
 
     ];
 
+
     public function package_questions(): HasMany
 {
     return $this->hasMany(Package_question::class);

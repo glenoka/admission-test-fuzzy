@@ -8,6 +8,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/do-tryout/{id}', [ExamAttemptController::class,'doExam'])->name('do-tryout');
-    Route::get('do-exam',AttemptExam::class)->name('do-exam');
+    Route::get('/do-exam/{id}',AttemptExam::class)->name('do-exam');
 });

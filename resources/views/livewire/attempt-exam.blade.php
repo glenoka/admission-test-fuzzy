@@ -1,3 +1,46 @@
 <div>
-    {{-- Knowing others is intelligence; knowing yourself is true wisdom. --}}
+
+    <div class="container">
+        <!-- Timer -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Sisa Waktu</h5>
+                <div id="timer" class="display-4 text-danger">
+                    Time Left : 00:00:00
+                </div>
+            </div>
+        </div>
+        <div class="question-nav mb-4 d-flex flex-wrap gap-2" id="questionNav">
+
+            {{ $currentQuestion->question_id }}
+
+            @foreach ($Questions as $index => $question)
+                <button
+                    class="btn btn-sm {{ $question->question_id == $currentQuestion->question_id ? 'btn-primary' : 'btn-outline-primary' }}"
+                    data-question-id="{{ $question->question_id }}"
+                    wire:click="goToQuestion({{ $question->question_id }})">
+                    {{ $index + 1 }}
+                </button>
+            @endforeach
+        </div>
+
+        <h3 class="mb-4">{{ $currentQuestion->question->question }}</h3>
+
+        @foreach ($currentQuestion->question->options as $option)
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="answer_{{ $currentQuestion->question_id }}"
+                    value="{{ $option->id }}" wire:model="selectedAnswers.{{ $currentQuestion->question_id }}"
+                    wire:click="saveAnswer({{ $currentQuestion->question_id }}, {{ $option->id }})">
+                <label class="form-check-label">
+                    {{ $selectedAnswers[$currentQuestion->question_id] }}:{{ $option->id }}
+                    {{ $option->option_text }}
+                </label>
+            </div>
+        @endforeach
+        Question ID : {{ $currentQuestion->question_id }}
+        Option ID : {{ $selectedAnswers[$currentQuestion->question_id] }}
+        <div class="mt-3">
+            <pre>{{ json_encode($selectedAnswers, JSON_PRETTY_PRINT) }}</pre>
+        </div>
+    </div>
 </div>

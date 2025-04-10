@@ -47,7 +47,7 @@ class ExamResource extends Resource
                             $set('duration', $package->duration);
                         }
                     }),
-                TextInput::make('duration'),
+                TextInput::make('duration')->readOnly(),
 
 
             ]);
@@ -74,7 +74,7 @@ class ExamResource extends Resource
                 ->label('Started')
                 ->icon('heroicon-o-play')
                 ->color('success')
-                ->url(fn ($record) => route('do-tryout', $record))
+                ->url(fn ($record) => route('do-exam', $record))
                 ->openUrlInNewTab()
             ])
             ->bulkActions([
