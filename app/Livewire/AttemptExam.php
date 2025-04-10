@@ -13,7 +13,7 @@ class AttemptExam extends Component
 {
     public $examQuestion;
     public $Exam;
-    public $currentQuestion;
+    public $currentPackageQuestion;
     public $Questions;
     public $selectedAnswers = [];
     public $Exam_Answer;
@@ -28,10 +28,10 @@ class AttemptExam extends Component
             ]);
         }
         $this->examQuestion = Package::with('package_questions.question.options')->find($this->Exam->package_id);
-        if ($this->Exam) {
+        if ($this->examQuestion) {
             $this->Questions = $this->examQuestion->package_questions;
             if ($this->Questions->isNotEmpty()) {
-                $this->currentQuestion = $this->Questions->first();
+                $this->currentPackageQuestion = $this->Questions->first();
             }
         }
 
@@ -48,22 +48,22 @@ class AttemptExam extends Component
                 ]);
             }
         }
-
+       $this->reloadAnswer();
+    }
+    public function reloadAnswer(){
         $this->Exam_Answer = Exam_Answer::where('exam_id', $this->Exam->id)->get();
         foreach($this->Exam_Answer as $answer) {
             $this->selectedAnswers[$answer->question_id] = $answer->option_id;
 
         }
-          
     }
-
 
     public function goToQuestion($question_id)
     {
       
-        $this->currentQuestion = $this->Questions->where('question_id', $question_id)->first();
-     
-        
+        $this->currentPackageQuestion = $this->Questions->where('question_id', $question_id)->first();
+        $this->reloadAnswer();
+       
     }
     public function saveAnswer($questionId, $optionId)
     {
