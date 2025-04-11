@@ -198,7 +198,7 @@
                     @foreach ($currentPackageQuestion->question->options as $option)
                         <div class="question-nav mb-4 d-flex flex-wrap gap-2" id="questionNav">
                             <div class="option">
-                                <input class="form-check-input" type="radio"
+                                <input class="form-check-input" type="radio" @if ($timeLeft <= 0) disabled @endif
                                     name="answer_{{ $currentPackageQuestion->question_id }}" value="{{ $option->id }}"
                                     wire:key="{{ $option->id }}"
                                     wire:click="saveAnswer({{ $currentPackageQuestion->question_id }}, {{ $option->id }})"
@@ -217,7 +217,7 @@
             <div class="card">
                 <div class="nav-buttons" id="navButtons">
                     @foreach ($Questions as $index => $question)
-                        <button
+                        <button @if ($timeLeft <= 0) disabled @endif
                             class="btn btn-sm {{ $question->question_id == $currentPackageQuestion->question_id ? 'btn-primary' : 'btn-outline-primary' }}"
                             data-question-id="{{ $question->question_id }}"
                             wire:click="goToQuestion({{ $question->question_id }})">
@@ -225,12 +225,17 @@
                         </button>
                     @endforeach
                 </div>
-                <button id="submit">Submit Exam</button>
+                <button wire:click="submit" onclick="return confirm('Apakah anda yakin ingin mengirim jawaban ini?')" id="submit">Submit Exam</button>
             </div>
         </div>
 
-
-
+       
+    </div>
+    @if(session()->has('message'))
+    <div class="alert alert-success text-center">
+        {{ session('message') }} <a href="{{url('admin/tryouts')}}">Lihat Hasil Pengerjaan</a>
+    </div>
+@endif
     </div>
 
     <script>

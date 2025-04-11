@@ -114,6 +114,12 @@ public $timeLeft;
 
        
     }
+    public function submit()
+    {
+        $this->Exam->update(['finished_at' => now()]);
+        $this->calculateTimeLeft();
+        session()->flash('message', 'Data berhasil disimpan');
+    }
     public function render()
     {
         return view('livewire.attempt-exam');
