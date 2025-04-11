@@ -5,8 +5,8 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">Sisa Waktu</h5>
-                <div id="timer" class="display-4 text-danger">
-                    Time Left : 00:00:00
+                <div id="time" class="display-4 text-danger">
+                   00:00:00
                 </div>
             </div>
         </div>
@@ -44,4 +44,29 @@
             <pre>{{ json_encode($selectedAnswers, JSON_PRETTY_PRINT) }}</pre>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let timeLeft = {{$timeLeft}};
+            startCountdown(timeLeft, document.getElementById('time'));
+        });
+
+        function startCountdown(duration, display) {
+            let timer = duration, minutes, seconds;
+            setInterval(function() {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = hours + ":" + minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = 0;
+                }
+            }, 1000);
+        }
+    </script>
 </div>

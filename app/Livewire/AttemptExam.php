@@ -17,7 +17,7 @@ class AttemptExam extends Component
     public $Questions;
     public $selectedAnswers = [];
     public $Exam_Answer;
-
+public $timeLeft;
 
     public function mount($id){
         $this->Exam=Exam::where('slug', $id)->first();
@@ -50,6 +50,7 @@ class AttemptExam extends Component
         }
        
        $this->reloadAnswer();
+       $this->calculateTimeLeft();
      
     }
     public function reloadAnswer(){
@@ -64,7 +65,7 @@ class AttemptExam extends Component
     {
 
         $this->currentPackageQuestion = $this->Questions->where('question_id', $question_id)->first();
-       
+        $this->calculateTimeLeft();
 
     }
     public function isOptionSelected($questionId, $optionId)
@@ -92,6 +93,26 @@ class AttemptExam extends Component
             ]);
         }
         $this->selectedAnswers[$questionId] = $optionId;
+    }
+    protected function calculateTimeLeft()
+    {
+        if ($this->Exam->finished_at) {
+            $this->timeLeft = 0;
+            
+        } else {
+            $now = time();
+            $startedAt = strtotime($this->Exam->started_at);
+    
+            $sisaWaktu = $now - $startedAt;
+      
+            if ($sisaWaktu < 0) {
+                $this->timeLeft = 0;
+            } else {
+                $this->timeLeft = max(0, ($this->Exam->duration*60) - $sisaWaktu);
+            }
+        }
+
+       
     }
     public function render()
     {
