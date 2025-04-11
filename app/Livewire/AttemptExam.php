@@ -48,7 +48,9 @@ class AttemptExam extends Component
                 ]);
             }
         }
+       
        $this->reloadAnswer();
+     
     }
     public function reloadAnswer(){
         $this->Exam_Answer = Exam_Answer::where('exam_id', $this->Exam->id)->get();
@@ -62,7 +64,7 @@ class AttemptExam extends Component
     {
 
         $this->currentPackageQuestion = $this->Questions->where('question_id', $question_id)->first();
-        $this->reloadAnswer();
+       
 
     }
     public function isOptionSelected($questionId, $optionId)
@@ -89,6 +91,7 @@ class AttemptExam extends Component
                 'score' => $score
             ]);
         }
+        $this->selectedAnswers[$questionId] = $optionId;
     }
     public function render()
     {
