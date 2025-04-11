@@ -17,7 +17,7 @@ class AttemptExam extends Component
     public $Questions;
     public $selectedAnswers = [];
     public $Exam_Answer;
-    
+
 
     public function mount($id){
         $this->Exam=Exam::where('slug', $id)->first();
@@ -60,14 +60,23 @@ class AttemptExam extends Component
 
     public function goToQuestion($question_id)
     {
-      
+
         $this->currentPackageQuestion = $this->Questions->where('question_id', $question_id)->first();
         $this->reloadAnswer();
-       
+
     }
+    public function isOptionSelected($questionId, $optionId)
+{
+
+    $answer = Exam_Answer::where('exam_id', $this->Exam->id)
+                        ->where('question_id', $questionId)
+                        ->first();
+
+    return $answer && $answer->option_id == $optionId;
+}
     public function saveAnswer($questionId, $optionId)
     {
-        
+
         $option = Question_Option::find($optionId);
         $score = $option->score ?? 0;
 

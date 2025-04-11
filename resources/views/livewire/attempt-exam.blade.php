@@ -29,10 +29,11 @@
         @foreach ($currentPackageQuestion->question->options as $option)
             <div class="form-check mb-3">
                 <input class="form-check-input" type="radio" name="answer_{{ $currentPackageQuestion->question_id }}"
-                    value="{{ $option->id }}" wire:model="selectedAnswers.{{ $currentPackageQuestion->question_id }}"
-                    wire:click="saveAnswer({{ $currentPackageQuestion->question_id }}, {{ $option->id }})">
+                    value="{{ $option->id }}" wire:key="{{ $option->id }}"
+                    wire:click="saveAnswer({{ $currentPackageQuestion->question_id }}, {{ $option->id }})"
+                    @if ($selectedAnswers[$currentPackageQuestion->question_id] == $option->id) checked @endif>
+                {{-- @checked($this->isOptionSelected($currentPackageQuestion->question_id, $option->id))> --}}
                 <label class="form-check-label">
-                    {{ $selectedAnswers[$currentPackageQuestion->question_id] }}:{{ $option->id }}
                     {{ $option->option_text }}
                 </label>
             </div>
