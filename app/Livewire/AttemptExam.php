@@ -15,9 +15,9 @@ class AttemptExam extends Component
     public $Exam;
     public $currentPackageQuestion;
     public $Questions;
-    public $selectedAnswers = [];
     public $Exam_Answer;
-public $timeLeft;
+    public $timeLeft;
+    public $answerEssay=[];
 
     public function mount($id){
         $this->Exam=Exam::where('slug', $id)->first();

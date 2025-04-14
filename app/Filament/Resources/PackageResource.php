@@ -37,6 +37,13 @@ class PackageResource extends Resource
                     Forms\Components\TextInput::make('duration')
                         ->required()
                         ->numeric(),
+                    Forms\Components\Select::make('type_package')
+                        ->options([
+                            'option' => 'Multiple Choice',
+                            'essay' => 'Essay',
+                        ])
+                        ->required()
+                        ->label('Tipe Paket'),
                     ])
                     ]),
                     Repeater::make('package_questions')
@@ -45,6 +52,7 @@ class PackageResource extends Resource
                             Select::make('question_id')
                                 ->relationship('question','question')
                                 ->label('Soal')
+                                ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->question} - [{$record->question_type}]")
                                 ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                 ->required(),
                         ])
@@ -61,6 +69,8 @@ class PackageResource extends Resource
                 ->numeric()
                 ->label('Menit')
                 ->sortable(),
+            Tables\Columns\TextColumn::make('type_package')
+                ->label('Tipe Paket'),
             Tables\Columns\TextColumn::make('package_questions_count')
                 ->counts('package_questions')
                 ->label('Jumlah Soal')

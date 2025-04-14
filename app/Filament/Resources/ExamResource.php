@@ -74,7 +74,11 @@ class ExamResource extends Resource
                 ->label('Started')
                 ->icon('heroicon-o-play')
                 ->color('success')
-                ->url(fn ($record) => route('do-exam', $record))
+                ->url(function ($record) {
+                    return $record->package->package_type == 'option' 
+                        ? route('do-exam', $record) 
+                        : route('do-exam-essay', $record);
+                })
                 ->openUrlInNewTab()
             ])
             ->bulkActions([
