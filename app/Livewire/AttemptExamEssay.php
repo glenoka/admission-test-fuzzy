@@ -14,10 +14,11 @@ class AttemptExamEssay extends Component
     public $Exam;
     public $currentPackageQuestion;
     public $Questions;
-    public $answerEssay = [];
+    public $answerEssay = []; //tampung jawaban saat load pertama
     public $Exam_Answer;
     public $Exam_id;
     public $timeLeft;
+    public $answer=[]; //tampung semua jawaban essay
     
 
     public function mount($id)
@@ -45,10 +46,37 @@ class AttemptExamEssay extends Component
         } else {
             $this->answerEssay[$this->currentPackageQuestion->question_id] = null;
         }
-        
+        $is_exist_exam_answer=Exam_Answer::where('exam_id', $this->Exam->id)->first();
+        if (!$is_exist_exam_answer) {
+            foreach($this->Questions as $question){
+                $addAnswerExamFirst=Exam_Answer::create([
+                    'exam_id'=> $this->Exam->id,
+                    'question_id'=>$question->question_id,
+                    'option_id'=> null,
+                    'essay_answer'=>null,
+                    'score'=> 0
+                ]);
+            }
+        }
         $this->calculateTimeLeft();
+        $this->reloadAnswer();
+       
+       
        
 
+    }
+
+    public function reloadAnswer(){
+        $this->Exam_Answer = Exam_Answer::where('exam_id', $this->Exam->id)->get();
+        foreach($this->Exam_Answer as $answer) {
+            if($answer->essay_answer != null){
+                $this->answer[$answer->question_id] = true;
+            }else{
+                $this->answer[$answer->question_id] = false;
+            }
+            
+
+        }
     }
     public function updateAnswer($questionId)
     {
@@ -56,6 +84,7 @@ class AttemptExamEssay extends Component
         $updateAnswer = Exam_Answer::where('exam_id', $this->Exam->id)->where('question_id', $questionId)->first();
         if ($updateAnswer) {
             $updateAnswer->essay_answer = $this->answerEssay[$questionId];
+            $this->answer[$questionId] = true;
             $updateAnswer->save();
         } else {
             Exam_Answer::create([

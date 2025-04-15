@@ -217,8 +217,13 @@
             <div class="card">
                 <div class="nav-buttons" id="navButtons">
                     @foreach ($Questions as $index => $question)
+                    @php
+        $isActive = $question->question_id == $currentPackageQuestion->question_id;
+        $isAnswered = isset($selectedAnswers[$question->question_id]) && !is_null($selectedAnswers[$question->question_id]);
+    @endphp
                         <button @if ($timeLeft <= 0) disabled @endif
-                            class="btn btn-sm {{ $question->question_id == $currentPackageQuestion->question_id ? 'btn-primary' : 'btn-outline-primary' }}"
+                            class="btn btn-sm {{ $isAnswered ? 'btn-success' : 
+           ($isActive ? 'btn-primary' : 'btn-outline-primary') }}"
                             data-question-id="{{ $question->question_id }}"
                             wire:click="goToQuestion({{ $question->question_id }})">
                             {{ $index + 1 }}

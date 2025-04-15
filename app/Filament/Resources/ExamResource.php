@@ -75,7 +75,7 @@ class ExamResource extends Resource
                 ->icon('heroicon-o-play')
                 ->color('success')
                 ->url(function ($record) {
-                    return $record->package->package_type == 'option' 
+                    return $record->package->type_package == 'option' 
                         ? route('do-exam', $record) 
                         : route('do-exam-essay', $record);
                 })

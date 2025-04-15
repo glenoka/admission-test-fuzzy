@@ -18,7 +18,8 @@ class AttemptExam extends Component
     public $Exam_Answer;
     public $timeLeft;
     public $answerEssay=[];
-
+    public $selectedAnswers = [];
+    
     public function mount($id){
         $this->Exam=Exam::where('slug', $id)->first();
         if($this->Exam->started_at==null){
@@ -68,15 +69,7 @@ class AttemptExam extends Component
         $this->calculateTimeLeft();
 
     }
-    public function isOptionSelected($questionId, $optionId)
-{
-
-    $answer = Exam_Answer::where('exam_id', $this->Exam->id)
-                        ->where('question_id', $questionId)
-                        ->first();
-
-    return $answer && $answer->option_id == $optionId;
-}
+    
     public function saveAnswer($questionId, $optionId)
     {
 
