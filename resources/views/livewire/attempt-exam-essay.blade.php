@@ -194,7 +194,7 @@
             <div class="card">
                 <div class="soal">
                     <p> {{ $currentPackageQuestion->question->question }}</p>
-                    <textarea
+                    <textarea @if ($timeLeft <= 0) disabled @endif
                         wire:model.debounce.500ms="answerEssay.{{ $currentPackageQuestion->question_id }}"
                         class="form-control"
                         wire:key="answerEssay-{{ $currentPackageQuestion->question_id }}"
@@ -213,7 +213,7 @@
         $isActive = $question->question_id == $currentPackageQuestion->question_id;
         $isAnswered = $answer[$question->question_id];
     @endphp
-                    <button
+                    <button @if ($timeLeft <= 0) disabled @endif
                         class="btn btn-sm {{ $isAnswered ? 'btn-success' : 
            ($isActive ? 'btn-primary' : 'btn-outline-primary') }}"
                         data-question-id="{{ $question->question_id }}"
