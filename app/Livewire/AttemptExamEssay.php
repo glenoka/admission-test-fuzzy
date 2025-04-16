@@ -31,9 +31,7 @@ class AttemptExamEssay extends Component
             Exam::where('slug',$id)->update([
                 'started_at' => $startedAt,
             ]);
-        }else{
-            $this->timeLeft = 0;
-            session()->flash('message', 'Tryout sudah selesai');
+            $this->Exam->refresh();
         }
         $this->examQuestion = Package::with('package_questions.question.options')->find($this->Exam->package_id);
         if ($this->examQuestion) {
@@ -117,7 +115,7 @@ class AttemptExamEssay extends Component
     }
     protected function calculateTimeLeft()
     {
-        if ($this->Exam->finish_at) {
+        if ($this->Exam->finish_at!=null) {
             $this->timeLeft = 0;
             
         } else {
@@ -132,18 +130,19 @@ class AttemptExamEssay extends Component
                 $this->timeLeft = max(0, ($this->Exam->duration*60) - $sisaWaktu);
             }
         }
-
        
+      
     }
 
     public function submit()
     {
         
-        $update=Exam::where('slug', $this->Exam_id)->update(['finish_at' => now()]);
+        $this->Exam->update(['finish_at' => now()]);
         
         $this->timeLeft = 0;
         $this->calculateTimeLeft();
         session()->flash('message', 'Data berhasil disimpan');
+        $this->dispatch('examFinished');
     }
     public function render()
     {

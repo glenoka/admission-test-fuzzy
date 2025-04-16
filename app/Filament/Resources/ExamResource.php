@@ -69,7 +69,10 @@ class ExamResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                ->visible(function ($record) {
+                    return $record->started_at == null;
+                }),
                 Action::make('start_test')
                 ->label('Started')
                 ->icon('heroicon-o-play')
@@ -78,6 +81,9 @@ class ExamResource extends Resource
                     return $record->package->type_package == 'option' 
                         ? route('do-exam', $record) 
                         : route('do-exam-essay', $record);
+                })
+                ->visible(function ($record) {
+                    return $record->finish_at == null;
                 })
                 ->openUrlInNewTab()
             ])

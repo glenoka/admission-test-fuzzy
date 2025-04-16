@@ -194,7 +194,7 @@
             <div class="card">
                 <div class="soal">
                     <p> {{ $currentPackageQuestion->question->question }}</p>
-                    <textarea @if ($timeLeft <= 0) disabled @endif
+                    <textarea @if ($timeLeft <=0) disabled @endif
                         wire:model.debounce.500ms="answerEssay.{{ $currentPackageQuestion->question_id }}"
                         class="form-control"
                         wire:key="answerEssay-{{ $currentPackageQuestion->question_id }}"
@@ -210,10 +210,10 @@
                 <div class="nav-buttons" id="navButtons">
                     @foreach ($Questions as $index => $question)
                     @php
-        $isActive = $question->question_id == $currentPackageQuestion->question_id;
-        $isAnswered = $answer[$question->question_id];
-    @endphp
-                    <button @if ($timeLeft <= 0) disabled @endif
+                    $isActive = $question->question_id == $currentPackageQuestion->question_id;
+                    $isAnswered = $answer[$question->question_id];
+                    @endphp
+                    <button @if ($timeLeft <=0) disabled @endif
                         class="btn btn-sm {{ $isAnswered ? 'btn-success' : 
            ($isActive ? 'btn-primary' : 'btn-outline-primary') }}"
                         data-question-id="{{ $question->question_id }}"
@@ -230,35 +230,39 @@
     </div>
     @if(session()->has('message'))
     <div class="alert alert-success text-center">
-        {{ session('message') }} <a href="{{url('admin/tryouts')}}">Lihat Hasil Pengerjaan</a>
+        {{ session('message') }}
     </div>
     @endif
 </div>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
             let timeLeft = {{ $timeLeft }};
             startCountdown(timeLeft, document.getElementById('countdown'));
+
+            Livewire.on('examFinished', () => {
+                window.location.reload();
+            });
         });
 
-        function startCountdown(duration, display) {
-            let timer = duration,
-                minutes, seconds;
-            setInterval(function() {
-                hours = parseInt(timer / 3600, 10);
-                minutes = parseInt((timer % 3600) / 60, 10);
-                seconds = parseInt(timer % 60, 10);
+    function startCountdown(duration, display) {
+        let timer = duration,
+            minutes, seconds;
+        setInterval(function() {
+            hours = parseInt(timer / 3600, 10);
+            minutes = parseInt((timer % 3600) / 60, 10);
+            seconds = parseInt(timer % 60, 10);
 
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+            hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                display.textContent = hours + ":" + minutes + ":" + seconds;
+            display.textContent = hours + ":" + minutes + ":" + seconds;
 
-                if (--timer < 0) {
-                    timer = 0;
-                }
-            }, 1000);
-        }
-    </script>
+            if (--timer < 0) {
+                timer = 0;
+            }
+        }, 1000);
+    }
+</script>
 </div>

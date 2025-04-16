@@ -238,7 +238,7 @@
     </div>
     @if(session()->has('message'))
     <div class="alert alert-success text-center">
-        {{ session('message') }} <a href="{{url('admin/tryouts')}}">Lihat Hasil Pengerjaan</a>
+        {{ session('message') }} 
     </div>
 @endif
     </div>
@@ -247,6 +247,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             let timeLeft = {{ $timeLeft }};
             startCountdown(timeLeft, document.getElementById('countdown'));
+            Livewire.on('examFinished', () => {
+                window.location.reload();
+            });
         });
 
         function startCountdown(duration, display) {
