@@ -14,6 +14,7 @@ class Package extends Model
         'name',
         'duration',
         'type_package',
+        'kategori_package',
 
     ];
 
