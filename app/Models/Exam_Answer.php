@@ -19,7 +19,7 @@ class Exam_Answer extends Model
 
     public function question()
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Question::class, 'question_id');
     }
 
     public function option()
@@ -31,4 +31,8 @@ class Exam_Answer extends Model
     {
         return $this->belongsTo(Exam::class);
     }
+    public function packageQuestion()
+{
+    return $this->belongsTo(Package_Question::class, 'question_id'); // Pastikan foreign key benar
+}
 }

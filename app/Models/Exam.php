@@ -32,6 +32,11 @@ class Exam extends Model
     {
         return $this->belongsTo(Package::class);
     }
+    
+    public function package_questions()
+    {
+        return $this->belongsTo(Package_question::class, 'question_id',);
+    }
 
     public function answers()
     {
