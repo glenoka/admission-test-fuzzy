@@ -10,8 +10,10 @@ use Filament\Forms\Form;
 use App\Models\Districts;
 use App\Models\Participant;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Blade;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
@@ -22,6 +24,10 @@ use Filament\Pages\Auth\Register as AuthRegister;
 
 class Register extends AuthRegister
 {
+    protected function getCsrfToken(): HtmlString
+    {
+        return new HtmlString(Blade::render('@csrf'));
+    }
     public function form(Form $form): Form
     {
         return $form->schema([

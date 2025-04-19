@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('formation_id')->constrained('formations')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('participant_id')->constrained('participants')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->enum('status',['progress','accepted','rejected']);
             $table->softDeletes();
             $table->timestamps();
         });
