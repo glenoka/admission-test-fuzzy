@@ -15,4 +15,8 @@ class Aspect extends Model
     public function section(){
         return $this->belongsTo(Section::class);
     }
+    public function evaluation_details()
+    {
+        return $this->hasMany(Evaluation_details::class);
+    }
 }

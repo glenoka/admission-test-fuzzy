@@ -19,7 +19,7 @@ use App\Filament\Resources\FormationSelectionResource;
 class DetailFormationSelection extends Page 
 {
     protected static string $resource = FormationSelectionResource::class;
-    protected static string $view = 'filament.pages.detail-formation-selection';
+    protected static string $view = 'filament.resources.formation-selection-resource.pages.detail-formation-selection';
    
 
     public $record;
@@ -95,7 +95,7 @@ class DetailFormationSelection extends Page
                         ->success()
                         ->send();
                 })
-                ->visible(fn () => $this->record->status !== 'approved'),
+                ->visible(fn () => $this->record->status !== 'accepted  '),
                 
             Action::make('reject')
                 ->button()

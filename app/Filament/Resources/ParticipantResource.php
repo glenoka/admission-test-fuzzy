@@ -147,10 +147,10 @@ class ParticipantResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name') ->searchable(),
             TextColumn::make('email'),
             TextColumn::make('telp'),
-            TextColumn::make('status'),
+            TextColumn::make('status') ->searchable(),
             ImageColumn::make('image'),
             ])
             ->filters([
