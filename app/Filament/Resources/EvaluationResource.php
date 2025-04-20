@@ -76,7 +76,8 @@ class EvaluationResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Action::make('doEvaluation')
                 ->label('Evaluate')
-                ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record]))
+                ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record->id]))
+                // ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record]))
                 ->icon('heroicon-s-document-text')
                 ->color('primary'),
                 

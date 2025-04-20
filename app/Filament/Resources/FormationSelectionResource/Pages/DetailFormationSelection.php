@@ -95,7 +95,7 @@ class DetailFormationSelection extends Page
                         ->success()
                         ->send();
                 })
-                ->visible(fn () => $this->record->status !== 'accepted  '),
+                ->visible(fn () => $this->record->status !== 'accepted'),
                 
             Action::make('reject')
                 ->button()

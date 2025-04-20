@@ -18,12 +18,12 @@ class Evaluation extends Model
     {
         return $this->belongsTo(Formation_selection::class);
     }
-    public function evaluation_details()
+    public function evaluationDetails()
     {
-        return $this->hasMany(Evaluation_details::class);
+        return $this->hasMany(Evaluation_details::class, 'evaluation_id'); // Tambahkan foreign key
     }
     public function assessor()
     {
-        return $this->belongsTo(User::class, 'assessor_id');
+        return $this->belongsTo(Assessor::class, 'assessor_id');
     }
 }

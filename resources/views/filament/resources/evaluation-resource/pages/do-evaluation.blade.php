@@ -1,3 +1,3 @@
 <x-filament-panels::page>
-    "Test"
+    {{ $this->form }}
 </x-filament-panels::page>

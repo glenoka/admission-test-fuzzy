@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Evaluation_details extends Model
 {
+    protected $table = 'evaluation_details';
     protected $fillable = [
         'evaluation_id',
         'aspect_id',
@@ -13,9 +14,9 @@ class Evaluation_details extends Model
     ];
 
     public function evaluation()
-    {
-        return $this->belongsTo(Evaluation::class);
-    }
+{
+    return $this->belongsTo(Evaluation::class, 'evaluation_id'); // ✅
+}
 
     public function aspect()
     {
