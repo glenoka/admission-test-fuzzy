@@ -43,7 +43,15 @@ class PackageResource extends Resource
                             'essay' => 'Essay',
                         ])
                         ->required()
-                        ->label('Tipe Paket'),
+                        ->label('Tipe Soal'),
+                    Forms\Components\Select::make('kategory')
+                        ->options([
+                            'pilgan' => 'Pilihan Ganda',
+                            'pribadi' => 'Kataristik Pribadi',
+                            'wawancara' => 'Wawancara',
+                        ])
+                        ->required()
+                        ->label('Katgeori Paket'),
                     ])
                     ]),
                     Repeater::make('package_questions')

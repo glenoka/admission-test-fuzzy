@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('type_package',['essay','option']);
+            $table->enum('kategory',['pilgan','pribadi','wawancara']);
             $table->integer('duration');
             $table->softDeletes();
             $table->timestamps();
