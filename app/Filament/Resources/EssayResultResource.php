@@ -26,7 +26,7 @@ class EssayResultResource extends Resource
     protected static ?string $model = \App\Models\Exam::class;
     protected static ?string $navigationLabel = 'Result Essay'; // Label khusus
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-    protected static ?string $navigationGroup = 'Result';
+    protected static ?string $navigationGroup = 'Scoring & Result';
     protected static bool $shouldRegisterNavigation = true;
 
 

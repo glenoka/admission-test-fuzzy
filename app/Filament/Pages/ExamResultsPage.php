@@ -13,7 +13,7 @@ class ExamResultsPage extends Page implements HasTable
 {
     use InteractsWithTable;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationGroup = 'Result';
+    protected static ?string $navigationGroup = 'Scoring & Result';
     protected static string $view = 'filament.pages.exam-results-page';
 
     public static function getNavigationLabel(): string
