@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EvaluationResource\Pages;
 use PhpOffice\PhpSpreadsheet\Calculation\LookupRef\Selection;
 use App\Filament\Resources\EvaluationResource\RelationManagers;
+use App\Models\Evaluation_details;
 
 class EvaluationResource extends Resource
 {
@@ -54,7 +55,6 @@ class EvaluationResource extends Resource
     {
         return $table
             ->columns([
-              
                 Tables\Columns\TextColumn::make('assessor.name')
                     ->label('Assessor')
                     ->sortable()
@@ -68,6 +68,11 @@ class EvaluationResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('total_Score')   
+                ->getStateUsing(function (Evaluation $record) {
+                    // Hitung total score dari relasi examAnswers
+                    return $record->evaluationDetails()->sum('score');
+                })
             ])
             ->filters([
                 //

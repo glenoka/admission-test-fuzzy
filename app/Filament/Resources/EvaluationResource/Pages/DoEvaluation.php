@@ -5,11 +5,15 @@ namespace App\Filament\Resources\EvaluationResource\Pages;
 use App\Models\Aspect;
 use Filament\Forms\Form;
 use App\Models\Evaluation;
+use Filament\Actions\Action;
 use App\Models\Evaluation_details;
 use Filament\Resources\Pages\Page;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use App\Filament\Resources\EvaluationResource;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
@@ -57,23 +61,82 @@ public function form(Form $form): Form
 {
 
     return $form 
-        ->schema([
-            Repeater::make('evaluationDetails')// Biarkan kosong karena sudah di-scoped ke record
-                ->schema([
-                    TextInput::make('aspect.task')
-                    ->label('Aspect')
-                        ->disabled(),
-                    TextInput::make('score')
-                        ->required()
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(100)
-                        ->label('Score')
-                ])
-                ->reorderable(false)
-                ->addable(false)
-                ->deletable(false)
-        ])
-        ->statePath('data');
+    ->schema([
+        Repeater::make('evaluationDetails')
+            ->label('Penilaian Aspek')
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('aspect.task')
+                                    ->label('Aspek Penilaian')
+                                    ->disabled()
+                                    ->prefixIcon('heroicon-o-clipboard-document-list')
+                                    ->columnSpanFull()
+                                    ->extraAttributes(['class' => 'font-bold text-primary-600']),
+                                    
+                                TextInput::make('score')
+                                    ->label('Skor')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->maxValue(10)
+                                    ->required()
+                                    ->prefixIcon('heroicon-o-star')
+                                    ->hint('Skala 0-10')
+                                    ->suffixIcon('heroicon-m-scale')
+                                    ->extraAttributes(['class' => 'bg-gray-50 rounded-lg'])
+                            ])
+                    ])
+                    ->heading(fn ($state) => "Aspek #" . ($state['aspect']['task'] ?? ''))
+                    ->collapsible()
+            ])
+            ->itemLabel(fn (array $state): ?string => $state['aspect']['section']['name'] ?? null)
+            ->addable(false)
+            ->deletable(false)
+            ->reorderable(false)
+            ->grid(1)
+            ->columns(1)
+            ->extraAttributes(['class' => 'space-y-4'])
+    ])
+    ->statePath('data');
+}
+protected function getHeaderActions(): array
+{
+    return [
+        Action::make('save')
+            ->label('Simpan Perubahan')
+            ->action('save')
+    ];
+}
+
+public function save(): void
+{
+    try {
+        $data = $this->form->getState();
+        
+        // Update semua evaluation details
+        foreach ($data['evaluationDetails'] as $detail) {
+            Evaluation_details::updateOrCreate(
+                [
+                    'evaluation_id' => $this->record->id,
+                    'aspect_id' => $detail['aspect']['id']
+                ],
+                ['score' => $detail['score']]
+            );
+        }
+
+        Notification::make()
+            ->title('Penilaian Tersimpan!')
+            ->success()
+            ->send();
+            
+    } catch (\Exception $e) {
+        Notification::make()
+            ->title('Gagal Menyimpan')
+            ->danger()
+            ->body($e->getMessage())
+            ->send();
+    }
 }
 }
