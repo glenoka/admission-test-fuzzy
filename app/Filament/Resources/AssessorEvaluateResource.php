@@ -2,17 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AssessorEvaluateResource\Pages;
-use App\Filament\Resources\AssessorEvaluateResource\RelationManagers;
-use App\Models\AssessorEvaluate;
-use App\Models\Evaluation;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\Formation;
+use App\Models\Evaluation;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
+use App\Models\AssessorEvaluate;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\AssessorEvaluateResource\Pages;
+use App\Filament\Resources\EvaluationResource\Pages\DoEvaluation;
+use App\Filament\Resources\AssessorEvaluateResource\RelationManagers;
 
 class AssessorEvaluateResource extends Resource
 {
@@ -40,13 +44,26 @@ class AssessorEvaluateResource extends Resource
     {
         return $table
             ->columns([
-                //
+               TextColumn::make('formation_selection.participant.name'),
+               TextColumn::make('date')
+               ->label('Start Date'),
+               Tables\Columns\TextColumn::make('total_Score')   
+               ->getStateUsing(function (Evaluation $record) {
+                   // Hitung total score dari relasi examAnswers
+                   return $record->evaluationDetails()->sum('score');
+               })
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+            
+                Action::make('assessor-evaluate')
+                ->label('Check Now')
+                ->url(fn ($record): string => AssessorEvaluateResource::getUrl('assessor-do-evaluate', ['record' => $record->id]))
+                // ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record]))
+                ->icon('heroicon-s-document-text')
+                ->color('primary'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -68,6 +85,7 @@ class AssessorEvaluateResource extends Resource
             'index' => Pages\ListAssessorEvaluates::route('/'),
             'create' => Pages\CreateAssessorEvaluate::route('/create'),
             'edit' => Pages\EditAssessorEvaluate::route('/{record}/edit'),
+            'assessor-do-evaluate' => Pages\AssessorDoEvaluate::route('/{record}/assessor-do-evaluate'),
         ];
     }
 }
