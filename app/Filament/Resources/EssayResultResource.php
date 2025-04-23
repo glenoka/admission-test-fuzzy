@@ -28,7 +28,10 @@ class EssayResultResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Scoring & Result';
     protected static bool $shouldRegisterNavigation = true;
-
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
