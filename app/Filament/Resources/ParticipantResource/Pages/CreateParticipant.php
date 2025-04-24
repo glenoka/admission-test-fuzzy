@@ -23,7 +23,7 @@ class CreateParticipant extends CreateRecord
         ]);
 
         $formData['user_id'] = $saveUser->id;
-
+        $saveUser->assignRole('participant');
     return $formData;
     }
 }

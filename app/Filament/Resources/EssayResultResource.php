@@ -24,6 +24,7 @@ class EssayResultResource extends Resource
 {
 
     protected static ?string $model = \App\Models\Exam::class;
+    protected static ?string $modelLabel = 'Essay Exam'; // Custom label
     protected static ?string $navigationLabel = 'Result Essay'; // Label khusus
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
     protected static ?string $navigationGroup = 'Scoring & Result';

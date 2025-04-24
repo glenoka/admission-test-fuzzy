@@ -23,6 +23,7 @@ class CreateAssessor extends CreateRecord
         ]);
 
         $formData['user_id'] = $saveUser->id;
+        $saveUser->assignRole('assessor');
 
     return $formData;
     }

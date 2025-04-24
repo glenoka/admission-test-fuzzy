@@ -148,7 +148,8 @@ class ParticipantResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name') ->searchable(),
-            TextColumn::make('email'),
+            TextColumn::make('email') ->copyable()->copyMessage('Email address copied')
+            ->copyMessageDuration(1500),
             TextColumn::make('telp'),
             TextColumn::make('status') ->searchable(),
             ImageColumn::make('image'),

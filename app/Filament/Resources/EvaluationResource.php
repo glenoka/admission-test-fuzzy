@@ -9,22 +9,26 @@ use App\Models\Evaluation;
 use Filament\Tables\Table;
 use Tabs\Actions\ActionGroup;
 use Filament\Resources\Resource;
+use App\Models\Evaluation_details;
 use App\Models\Formation_Selection;
 use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EvaluationResource\Pages;
 use PhpOffice\PhpSpreadsheet\Calculation\LookupRef\Selection;
 use App\Filament\Resources\EvaluationResource\RelationManagers;
-use App\Models\Evaluation_details;
 
 class EvaluationResource extends Resource
 {
     protected static ?string $model = Evaluation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    public static function getPermissionPrefix(): string
+    {
+        return 'Admin Evaluation';
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -53,6 +57,7 @@ class EvaluationResource extends Resource
 
     public static function table(Table $table): Table
     {
+      
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('assessor.name')
