@@ -14,14 +14,17 @@ class EditAssessor extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $formData = $this->form->getState();
-
-
+      
+        
         $user = User::find($this->record->user_id);
-
+        $user->update([ 
+            'email' => $formData['email_assessor'],
+        ]);
         // Update data user jika ada password baru
         if (isset($formData['password']) && !empty($formData['password'])) {
             $user->update([
-                'password' => bcrypt($formData['password'])
+                
+                'password' => $formData['password'],
             ]);
         }
 

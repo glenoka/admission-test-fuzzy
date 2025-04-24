@@ -39,7 +39,8 @@ class AdminResource extends Resource
                 ->description('Profile Data Admin ')
                 ->schema([
                     TextInput::make('name')
-                        ->reactive()
+                        ->live()
+                        ->required()
                         // Memperbaiki copy email ke field email user
                         ->afterStateUpdated(function (Set $set, ?string $state) {
                             if ($state) {
@@ -53,18 +54,20 @@ class AdminResource extends Resource
                         if($dataUser){
                             $set('user.name', $dataUser->name);
                             $set('email', $dataUser->email );
+                            $set('user.email', $dataUser->email);
                             $set('username', $dataUser->username);
                         }
 
 
                     }),
-                    TextInput::make('place_of_birth'),
-                    DatePicker::make('date_of_birth'),
+                    TextInput::make('place_of_birth')
+                    ->required(),
+                    DatePicker::make('date_of_birth')->required(),
                     Select::make('gender')
                         ->options([
                             'male' => 'Laki-laki',
                             'female' => 'Perempuan',
-                        ]),
+                        ])->required(),
                     Select::make('religion')
                         ->options([
                             'islam' => 'Islam',
@@ -74,9 +77,11 @@ class AdminResource extends Resource
                             'budha' => 'Budha',
                             'konghucu' => 'Konghucu',
                             'lainnya' => 'Lainnya',
-                        ]),
-                    Textarea::make('address'),
+                        ])->required(),
+                    Textarea::make('address')
+                    ->required(),
                     TextInput::make('email')
+                    ->required()
                         ->reactive()
                         // Memperbaiki copy email ke field email user
                         ->afterStateUpdated(function (Set $set, ?string $state) {
@@ -85,14 +90,19 @@ class AdminResource extends Resource
                             }
                         }),
 
-                    TextInput::make('telp'),
+                    TextInput::make('telp')->required()
+                    ->tel(),
                     Select::make('village_id')
                         ->relationship('village', 'name')
-                        ->searchable(),
+                        ->searchable()
+                        ->required(),
                     TextInput::make('status')
                         ->default('active')
                         ->disabled(),
                     FileUpload::make('image')->image()
+                    ->label('Foto Profile')
+                    ->image()
+                    ->required()
                     ->directory('admin')->columnSpanFull()
                     ->deleteUploadedFileUsing(function ($state) {
                         if ($state) {

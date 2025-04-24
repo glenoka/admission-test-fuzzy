@@ -129,7 +129,7 @@ class Register extends AuthRegister
                 $imagePath = $this->handleImageUpload($data['image']);
             }
             // 2. Buat participant dengan relasi ke user
-            Participant::create([
+            $Participant=Participant::create([
                 'user_id' => $user->id,
                 'nik' => $data['nik'],
                 'name' => $data['name'],
@@ -146,6 +146,7 @@ class Register extends AuthRegister
             ]);
 
             return $user;
+            $Participant->assignRole('participant');
         });
     }
 

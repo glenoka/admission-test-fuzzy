@@ -22,6 +22,7 @@ class CreateAdmin extends CreateRecord
         ]);
 
         $formData['user_id'] = $saveUser->id;
+        $saveUser->assignRole('admin');
 
     return $formData;
     }
