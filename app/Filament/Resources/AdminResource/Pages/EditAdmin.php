@@ -23,7 +23,7 @@ class EditAdmin extends EditRecord
         // Update data user jika ada password baru
         if (isset($formData['password']) && !empty($formData['password'])) {
             $user->update([
-                'password' => ['password'],
+                'password' => $formData['password'],
             ]);
         }
 
