@@ -85,7 +85,13 @@ class ExamResource extends Resource
                 ->visible(function ($record) {
                     return $record->finish_at == null;
                 })
-                ->openUrlInNewTab()
+                ->openUrlInNewTab(),
+                Tables\Actions\Action::make('scoring')
+                ->url(fn ($record): string => ExamResource::getUrl('scoring', ['record' => $record]))
+                ->icon('heroicon-o-star')
+                ->visible(function($record){
+                    return $record->package->type_package == 'essay' && $record->started_at != null;
+                })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -109,6 +115,7 @@ class ExamResource extends Resource
             'index' => Pages\ListExams::route('/'),
             'create' => Pages\CreateExam::route('/create'),
             'edit' => Pages\EditExam::route('/{record}/edit'),
+            'scoring' => Pages\AssessorScoringEssay::route('/{record}/scoring'),
         ];
     }
 
