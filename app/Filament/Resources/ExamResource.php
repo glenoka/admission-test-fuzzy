@@ -9,8 +9,9 @@ use App\Models\Package;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Tables\Actions\Action;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ExamResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExamResource\RelationManagers;
+use App\Models\Participant;
 
 class ExamResource extends Resource
 {
@@ -71,7 +73,7 @@ class ExamResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                 ->visible(function ($record) {
-                    return $record->started_at == null;
+                    return $record->started_at == null && Auth::user()->hasRole('super_admin');
                 }),
                 Action::make('start_test')
                 ->label('Started')
@@ -83,14 +85,14 @@ class ExamResource extends Resource
                         : route('do-exam-essay', $record);
                 })
                 ->visible(function ($record) {
-                    return $record->finish_at == null;
+                    return $record->finish_at == null && Auth::user()->hasRole('participant');
                 })
                 ->openUrlInNewTab(),
                 Tables\Actions\Action::make('scoring')
                 ->url(fn ($record): string => ExamResource::getUrl('scoring', ['record' => $record]))
                 ->icon('heroicon-o-star')
                 ->visible(function($record){
-                    return $record->package->type_package == 'essay' && $record->started_at != null;
+                    return $record->package->type_package == 'essay' && $record->started_at != null && Auth::user()->hasRole('assessor');
                 })
             ])
             ->bulkActions([
@@ -121,9 +123,24 @@ class ExamResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query= parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+        $role=Auth::user()->roles->first()->name;
+        
+        if($role=="Participant"){
+            return $query->whereHas('participant', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+        }
+        if($role=="Assessor"){
+            return $query->whereHas('assessor', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+        }
+        
+       
+        return $query;
     }
 }
