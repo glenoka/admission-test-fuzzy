@@ -42,9 +42,9 @@ class ParticipantResource extends Resource
                     ->description('Profile Data Participant ')
                     ->schema([
                         TextInput::make('name')
-                            ->live()
+                            ->live(onBlur: true)
                             ->required()
-                            // Memperbaiki copy email ke field email user
+                          
                             ->afterStateUpdated(function (Set $set, ?string $state) {
                                 if ($state) {
                                     $set('user.name', $state);
@@ -82,8 +82,7 @@ class ParticipantResource extends Resource
                             ]),
                         Textarea::make('address')->required(),
                         TextInput::make('email')
-                            ->live()
-                            // Memperbaiki copy email ke field email user
+                        ->live(onBlur: true)
                             ->afterStateUpdated(function (Set $set, ?string $state) {
                                 if ($state) {
                                     $set('user.email', $state);

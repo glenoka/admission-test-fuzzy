@@ -41,7 +41,7 @@ class AssessorResource extends Resource
                     ->description('Profile Assessor Data ')
                     ->schema([
                         TextInput::make('name')
-                            ->live()
+                        ->live(onBlur: true)
                             ->required()
                             // Memperbaiki copy email ke field email user
                             ->afterStateUpdated(function (Set $set, ?string $state) {
@@ -82,7 +82,7 @@ class AssessorResource extends Resource
                             ])->required(),
                         Textarea::make('address')->required(),
                         TextInput::make('email_assessor')
-                            ->live()
+                        ->live(onBlur: true)
                             ->required()
                             // Memperbaiki copy email ke field email user
                             ->afterStateUpdated(function (Set $set, ?string $state) {

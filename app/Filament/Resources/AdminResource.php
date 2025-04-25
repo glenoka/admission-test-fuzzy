@@ -39,7 +39,7 @@ class AdminResource extends Resource
                 ->description('Profile Data Admin ')
                 ->schema([
                     TextInput::make('name')
-                        ->live()
+                    ->live(onBlur: true)
                         ->required()
                         // Memperbaiki copy email ke field email user
                         ->afterStateUpdated(function (Set $set, ?string $state) {
@@ -82,7 +82,7 @@ class AdminResource extends Resource
                     ->required(),
                     TextInput::make('email')
                     ->required()
-                        ->reactive()
+                    ->live(onBlur: true)
                         // Memperbaiki copy email ke field email user
                         ->afterStateUpdated(function (Set $set, ?string $state) {
                             if ($state) {

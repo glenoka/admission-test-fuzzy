@@ -128,18 +128,20 @@ class ExamResource extends Resource
                 SoftDeletingScope::class,
             ]);
         $role=Auth::user()->roles->first()->name;
-        
-        if($role=="Participant"){
+     
+        if($role=="participant"){
             return $query->whereHas('participant', function ($query) {
                 $query->where('user_id', Auth::user()->id);
             });
         }
-        if($role=="Assessor"){
+
+        if($role=="assessor"){
             return $query->whereHas('assessor', function ($query) {
                 $query->where('user_id', Auth::user()->id);
             });
+           
         }
-        
+    
        
         return $query;
     }
