@@ -38,11 +38,12 @@ class ParticipantResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Profile Admin')
-                    ->description('Profile Data Admin ')
+                Section::make('Profile Participant')
+                    ->description('Profile Data Participant ')
                     ->schema([
                         TextInput::make('name')
-                            ->reactive()
+                            ->live()
+                            ->required()
                             // Memperbaiki copy email ke field email user
                             ->afterStateUpdated(function (Set $set, ?string $state) {
                                 if ($state) {
@@ -51,23 +52,25 @@ class ParticipantResource extends Resource
                             }),
                         TextInput::make('user_id')->hidden()
                             ->live()
+                            ->required()
                             ->afterStateHydrated(function (Set $set, ?string $state) {
                                 $dataUser = User::find($state);
                                 if ($dataUser) {
                                     $set('user.name', $dataUser->name);
-                                    $set('email', $dataUser->email);
+                                    $set('user.email', $dataUser->email);
                                     $set('username', $dataUser->username);
                                 }
                             }),
-                        TextInput::make('nik'),
-                        TextInput::make('place_of_birth'),
-                        DatePicker::make('date_of_birth'),
+                        TextInput::make('nik')->required(),
+                        TextInput::make('place_of_birth')->required(),
+                        DatePicker::make('date_of_birth')->required(),
                         Select::make('gender')
                             ->options([
                                 'male' => 'Laki-laki',
                                 'female' => 'Perempuan',
-                            ]),
+                            ])->required(),
                         Select::make('religion')
+                        ->required()
                             ->options([
                                 'islam' => 'Islam',
                                 'kristen' => 'Kristen',
@@ -77,41 +80,42 @@ class ParticipantResource extends Resource
                                 'konghucu' => 'Konghucu',
                                 'lainnya' => 'Lainnya',
                             ]),
-                        Textarea::make('address'),
+                        Textarea::make('address')->required(),
                         TextInput::make('email')
-                            ->reactive()
+                            ->live()
                             // Memperbaiki copy email ke field email user
                             ->afterStateUpdated(function (Set $set, ?string $state) {
                                 if ($state) {
                                     $set('user.email', $state);
                                 }
-                            }),
+                            })->required(),
 
-                        TextInput::make('telp'),
+                        TextInput::make('telp')->required()
+                        ->tel(),
                         Select::make('district_id')
                             ->label('District')
                             ->options(Districts::pluck('name', 'id'))
                             ->live()
-                            ->afterStateUpdated(fn(Set $set) => $set('village_id', null)),
+                            ->afterStateUpdated(fn(Set $set) => $set('village_id', null))
+                            ->required(),
 
                         Select::make('village_id')
                             ->label('Village')
-                            ->options(function (Get $get) {
-                                $districtId = $get('district_id');
-
-                                if (!$districtId) {
-                                    return [];
+                            ->relationship('village', 'name')
+                            ->searchable()
+                            ->required()
+                            ->afterStateHydrated(function (Set $set, ?string $state) {
+                                $dataVillage = Village::find($state);
+                                if ($dataVillage) {
+                                    $set('district_id', $dataVillage->district_id);
                                 }
-
-                                return Village::where('district_id', $districtId)
-                                    ->pluck('name', 'id');
-                            })
-                            ->searchable(),
+                            }),
                         TextInput::make('status')
                             ->default('active')
                             ->disabled(),
                         FileUpload::make('image')->image()
                             ->directory('participant')->columnSpanFull()
+                            ->required()
                             ->deleteUploadedFileUsing(
                                 function ($state) {
                                     if ($state) {

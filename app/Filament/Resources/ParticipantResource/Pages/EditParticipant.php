@@ -16,11 +16,13 @@ class EditParticipant extends EditRecord
 
 
         $user = User::find($this->record->user_id);
-
+        $user->update([
+            'email' => $formData['email'],
+        ]);
         // Update data user jika ada password baru
         if (isset($formData['password']) && !empty($formData['password'])) {
             $user->update([
-                'password' => bcrypt($formData['password'])
+                'password' => $formData['password'],
             ]);
         }
 
