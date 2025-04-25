@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\EvaluationResource\Pages;
 
-use App\Filament\Resources\EvaluationResource;
 use Filament\Actions;
+use Illuminate\Support\Facades\Auth;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\EvaluationResource;
 
 class ListEvaluations extends ListRecords
 {
@@ -13,7 +14,8 @@ class ListEvaluations extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+            ->visible(fn () => Auth::user()->hasRole('admin')),
         ];
     }
 }

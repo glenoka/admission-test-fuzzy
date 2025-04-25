@@ -83,7 +83,10 @@ class EvaluationResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                ->visible(function ($record) {
+                    return $record->started_at == null && Auth::user()->hasRole('super_admin');
+                }),
                 Action::make('doEvaluation')
                 ->label('Evaluate')
                 ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record->id]))
@@ -115,4 +118,29 @@ class EvaluationResource extends Resource
             'do-evaluation' => Pages\DoEvaluation::route('/{record}/do-evaluation'),
         ];
     }
+    public static function getEloquentQuery(): Builder
+    {
+        $query= parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+        $role=Auth::user()->roles->first()->name;
+     
+        if($role=="participant"){
+            return $query->whereHas('participant', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+        }
+
+        if($role=="assessor"){
+            return $query->whereHas('assessor', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            });
+           
+        }
+    
+       
+        return $query;
+    }
+    
 }
