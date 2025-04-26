@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Package;
+use App\Models\Creteria;
+use App\Models\Criteria;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -28,42 +30,38 @@ class PackageResource extends Resource
         return $form
             ->schema([
                 Group::make()
-                ->schema([
-                    Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                        ->required()
-                        ->maxLength(255),
-                    Forms\Components\TextInput::make('duration')
-                        ->required()
-                        ->numeric(),
-                    Forms\Components\Select::make('type_package')
-                        ->options([
-                            'option' => 'Multiple Choice',
-                            'essay' => 'Essay',
-                        ])
-                        ->required()
-                        ->label('Tipe Soal'),
-                    Forms\Components\Select::make('kategory')
-                        ->options([
-                            'pilgan' => 'Pilihan Ganda',
-                            'pribadi' => 'Kataristik Pribadi',
-                            'wawancara' => 'Wawancara',
-                        ])
-                        ->required()
-                        ->label('Katgeori Paket'),
-                    ])
+                        Section::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('duration')
+                                    ->required()
+                                    ->numeric(),
+                                Forms\Components\Select::make('type_package')
+                                    ->options([
+                                        'option' => 'Multiple Choice',
+                                        'essay' => 'Essay',
+                                    ])
+                                    ->required()
+                                    ->label('Tipe Soal'),
+                                Forms\Components\Select::make('creteria_id')
+                                    ->options(Criteria::all()->pluck('creteria', 'id'))
+                                    ->required()
+                                    ->label('Creteria'),
+                            ])
                     ]),
-                    Repeater::make('package_questions')
+                Repeater::make('package_questions')
                     ->relationship('package_questions')
-                        ->schema([
-                            Select::make('question_id')
-                                ->relationship('question','question')
-                                ->label('Soal')
-                                ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->question} - [{$record->question_type}]")
-                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                ->required(),
-                        ])
+                    ->schema([
+                        Select::make('question_id')
+                            ->relationship('question', 'question')
+                            ->label('Soal')
+                            ->getOptionLabelFromRecordUsing(fn($record) => "{$record->question} - [{$record->question_type}]")
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                            ->required(),
+                    ])
             ]);
     }
 
@@ -72,30 +70,32 @@ class PackageResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                ->searchable(),
-            Tables\Columns\TextColumn::make('duration')
-                ->numeric()
-                ->label('Menit')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('type_package')
-                ->label('Tipe Paket'),
-            Tables\Columns\TextColumn::make('package_questions_count')
-                ->counts('package_questions')
-                ->label('Jumlah Soal')
-                ->numeric()
-                ->sortable(),
-            Tables\Columns\TextColumn::make('deleted_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make('created_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make('updated_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('duration')
+                    ->numeric()
+                    ->label('Menit')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('type_package')
+                    ->label('Tipe Paket'),
+                Tables\Columns\TextColumn::make('package_questions_count')
+                    ->counts('package_questions')
+                    ->label('Jumlah Soal')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('creteria.creteria')
+                    ->label('Creteria'),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Creteria;
+use App\Models\Criteria;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,6 +17,7 @@ class Package extends Model
         'duration',
         'type_package',
         'kategory',
+        'creteria_id',
 
     ];
 
@@ -27,6 +28,6 @@ class Package extends Model
 }
 public function creteria(): BelongsTo
 {
-    return $this->belongsTo(Creteria::class);
+    return $this->belongsTo(Criteria::class);
 }
 }
