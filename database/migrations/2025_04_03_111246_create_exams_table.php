@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignid('package_id')->constrained('packages')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('duration');
             $table->string('slug'); //kode dari exam
+            $table->integer('total_score')->nullable();
             $table->foreignId('assessor_id')->constrained('assessors')->onDelete('cascade')->nullable();
             $table->timestamp('started_at');
             $table->timestamp('finish_at')->nullable();
