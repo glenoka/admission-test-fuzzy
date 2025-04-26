@@ -1,7 +1,7 @@
 1. Clone Git https://github.com/glenoka/admission-test-fuzzy.git
 2. CMD -> composer install 
 3. Setting Database dan App key di .env
-4. Migrate
+4. Migrate, storage-link
 5. Instal filament
 6. Install panel 
 7. Create user

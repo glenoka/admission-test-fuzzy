@@ -116,7 +116,8 @@ class AttemptExam extends Component
     }
     public function submit()
     {
-       
+        $totalScore=Exam_Answer::where('exam_id', $this->Exam->id)->sum('score');
+        $this->Exam->update(['total_score' => $totalScore]);
         $this->Exam->update(['finish_at' => now()]);
         $this->Exam->refresh();
       

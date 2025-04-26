@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('packages', function (Blueprint $table) {
+        Schema::create('creterias', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('type_package',['essay','option']);
-            $table->integer('duration');
-            $table->softDeletes();
+            $table->string('creteria');
+            $table->string('description');
+            $table->integer('value');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('creterias');
     }
 };
