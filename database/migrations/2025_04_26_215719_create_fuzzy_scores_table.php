@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('participant_id')->constrained();
             $table->foreignId('criteria_id')->constrained();
-            $table->float('original_score'); // Nilai asli (0-100)
-            $table->float('fuzzy_value'); // Hasil konversi ke fuzzy (0, 0.25, 0.5, 0.75, 1)
-            $table->float('normalized_value'); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
+            $table->float('score'); // Nilai asli (0-100)
+            $table->float('score_fuzzy'); // Hasil konversi ke fuzzy (0, 0.25, 0.5, 0.75, 1)
+            $table->float('score_fuzzy_normalized'); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
+            $table->float('score_final'); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
         });
     }
 

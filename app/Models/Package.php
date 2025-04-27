@@ -18,7 +18,7 @@ class Package extends Model
         'type_package',
         'kategory',
         'creteria_id',
-         //score maksimal setiap package di simpan di sini 
+        'score_max',
 
     ];
 

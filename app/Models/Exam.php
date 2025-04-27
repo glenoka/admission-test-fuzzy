@@ -17,7 +17,7 @@ class Exam extends Model
         'started_at',
         'finish_at',
         'assessor_id',
-        'total_score',//score setelah di normalisasi
+
     ];
 
     public function participant()
