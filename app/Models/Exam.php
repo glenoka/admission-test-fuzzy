@@ -17,6 +17,7 @@ class Exam extends Model
         'started_at',
         'finish_at',
         'assessor_id',
+        ''
 
     ];
 

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->string('question');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->enum('question_type', ['options', 'essay']);
-            $table->string('essay_answer_key')->nullable();
+            $table->text('essay_answer_key')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

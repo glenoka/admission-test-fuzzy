@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('criterias', function (Blueprint $table) {
             $table->id();
-            $table->string('creteria');
-            $table->string('description');
+            $table->string('criteria');
+            $table->string('description')->nullable();
             $table->integer('value');
             $table->timestamps();
         });
