@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
+use App\Models\Formation;
 use App\Models\Evaluation;
 use Filament\Tables\Table;
 use Tabs\Actions\ActionGroup;
@@ -13,6 +15,7 @@ use App\Models\Evaluation_details;
 use App\Models\Formation_Selection;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -37,17 +40,22 @@ class EvaluationResource extends Resource
                     ->relationship('assessor', 'name')
                     ->required()
                     ->label('Assessor'),
-                Forms\Components\Select::make('formation_selection_id')
-                    ->relationship(
-                        name: 'formation_selection',
-                        modifyQueryUsing: fn(Builder $query) => $query
-                            ->with('participant')
-                            ->where('status', 'accepted')
-                    )
-                    ->getOptionLabelFromRecordUsing(fn(Formation_Selection $record) => $record->participant->name)
+                Forms\Components\Select::make('formation_id')
+                    ->options(Formation::all()->pluck('name', 'id'))
                     ->required()
-                    ->unique()
-                    ->label('Participant'),
+                    ->live()
+                    ->label('Formation'),
+                Select::make('participant_id')
+                    ->label('Select Participant')
+                    ->options(function (Get $get) {
+                        $formationId = $get('formation_id');
+
+                        return Formation_Selection::with('participant')
+                            ->where('status', 'accepted')
+                            ->where('formation_id', $formationId)
+                            ->get()
+                            ->pluck('participant.name', 'participant.id');
+                    })->required(),
                 Forms\Components\DatePicker::make('date')
                     ->required()
                     ->label('Date')
@@ -57,14 +65,14 @@ class EvaluationResource extends Resource
 
     public static function table(Table $table): Table
     {
-      
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('assessor.name')
                     ->label('Assessor')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('formation_selection.participant.name')
+                Tables\Columns\TextColumn::make('participant.name')
                     ->label('Participant')
                     ->sortable()
                     ->searchable(),
@@ -73,27 +81,27 @@ class EvaluationResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('total_Score')   
-                ->getStateUsing(function (Evaluation $record) {
-                    // Hitung total score dari relasi examAnswers
-                    return $record->evaluationDetails()->sum('score');
-                })
+                Tables\Columns\TextColumn::make('total_Score')
+                    ->getStateUsing(function (Evaluation $record) {
+                        // Hitung total score dari relasi examAnswers
+                        return $record->evaluationDetails()->sum('score');
+                    })
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                ->visible(function ($record) {
-                    return $record->started_at == null && Auth::user()->hasRole('super_admin');
-                }),
+                    ->visible(function ($record) {
+                        return $record->started_at == null && Auth::user()->hasRole('super_admin');
+                    }),
                 Action::make('doEvaluation')
-                ->label('Evaluate')
-                ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record->id]))
-                // ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record]))
-                ->icon('heroicon-s-document-text')
-                ->color('primary'),
-                
+                    ->label('Evaluate')
+                    ->url(fn($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record->id]))
+                    // ->url(fn ($record): string => EvaluationResource::getUrl('do-evaluation', ['record' => $record]))
+                    ->icon('heroicon-s-document-text')
+                    ->color('primary'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -120,27 +128,25 @@ class EvaluationResource extends Resource
     }
     public static function getEloquentQuery(): Builder
     {
-        $query= parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
-        $role=Auth::user()->roles->first()->name;
-     
-        if($role=="participant"){
+        $role = Auth::user()->roles->first()->name;
+
+        if ($role == "participant") {
             return $query->whereHas('participant', function ($query) {
                 $query->where('user_id', Auth::user()->id);
             });
         }
 
-        if($role=="assessor"){
+        if ($role == "assessor") {
             return $query->whereHas('assessor', function ($query) {
                 $query->where('user_id', Auth::user()->id);
             });
-           
         }
-    
-       
+
+
         return $query;
     }
-    
 }

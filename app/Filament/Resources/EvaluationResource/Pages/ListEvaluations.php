@@ -15,7 +15,7 @@ class ListEvaluations extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-            ->visible(fn () => Auth::user()->hasRole('admin')),
+            ->visible(fn () => Auth::user()->hasRole('super_admin'))  ,
         ];
     }
 }

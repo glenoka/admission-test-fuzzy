@@ -3,12 +3,15 @@
 namespace App\Livewire;
 
 use App\Models\Exam;
-use App\Models\Exam_Answer;
-use App\Models\FuzzyScore;
+use FuzzyScoreConvert;
 use App\Models\Package;
 use Livewire\Component;
+use App\Models\FuzzyScore;
+use App\Models\Exam_Answer;
 use App\Models\Question_Option;
 use App\Models\Package_Question;
+use App\Models\Formation_Selection;
+use PhpOffice\PhpSpreadsheet\Calculation\LookupRef\Selection;
 
 class AttemptExam extends Component
 {
@@ -121,29 +124,26 @@ class AttemptExam extends Component
        
     }
 
-    public function convertToFuzzyValue(float $score):float
-    {
-        return match (true) {
-            $score >= 80 => 1,
-            $score >= 60 => 0.75,
-            $score >= 40 => 0.5,
-            $score >= 20 => 0.25,
-            default => 0,
-        };
-    }
+    
     public function submit()
     {
         //save total score
         $totalScore=Exam_Answer::where('exam_id', $this->Exam->id)->sum('score');
-        $this->Exam->update(['total_score' => $totalScore]);
+        $this->Exam->update(['total_score' => $totalScore*10]);
 
-        //save ke fuzzy score   
-        $saveFuzzyScore=FuzzyScore::create([
-            'participant_id' => $this->participant_id,
-            'criteria_id' => $this->criteria,
-            'original_score' => $totalScore,
-            'fuzzy_score' => $this->convertToFuzzyValue($totalScore),
-
+        $converter = new FuzzyScoreConvert();
+        $conversion = $converter->convertToFuzzyValue($totalScore*10);//kali 10 ini sementara karen soal cuma 10
+    
+        $getFormation=Formation_Selection::where('participant_id', $this->participant_id )->first();
+        FuzzyScore::updateOrCreate([
+            'source_type' => 1, // 1=exam, 2=evaluation
+            'source_id' =>  $this->Exam->id,
+            'participant_id' =>  $this->participant_id ,
+            'criteria_id' => $this->examQuestion->criteria_id, // ID dari criteria
+        ],[
+            'score' => $totalScore*10,
+            'formation_id' => $getFormation->formation_id,
+            'score_fuzzy' => $conversion,
         ]);
 
         //save essay answer

@@ -6,10 +6,13 @@ use Filament\Forms;
 use App\Models\Exam;
 use Filament\Tables;
 use App\Models\Package;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Participant;
 use Filament\Resources\Resource;
+use App\Models\Formation_Selection;
 use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
@@ -19,7 +22,6 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ExamResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ExamResource\RelationManagers;
-use App\Models\Participant;
 
 class ExamResource extends Resource
 {
@@ -31,24 +33,40 @@ class ExamResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('participant_id')
-                    ->label('Select Participant')
-                    ->searchable()
-                    ->relationship('participant', 'name'),
-                Select::make('assessor_id')
-                    ->label('Select Assessor')
-                    ->relationship('assessor', 'name'),
                 Select::make('package_id')
                     ->label('Select Package')
                     ->relationship('package', 'name')
                     ->live()
                     ->afterStateUpdated(function (Set $set, ?string $state) {
+                        $set('participant_id', null);
                         if ($state) {
 
                             $package = Package::find($state);
                             $set('duration', $package->duration);
                         }
-                    }),
+                    })->required(),
+                Select::make('participant_id')
+                    ->label('Select Participant')
+                    ->options(function (Get $get) {
+                        $packageId = $get('package_id');
+        
+                        if (!$packageId) {
+                            return [];
+                        }
+                        $package = Package::find($packageId);
+                        $formationId = $package->formation_id;
+
+                        return Formation_Selection::with('participant')
+                            ->where('status', 'accepted')
+                            ->where('formation_id', $formationId)
+                            ->get()
+                            ->pluck('participant.name', 'participant.id');
+                    })->required(),
+                Select::make('assessor_id')
+                    ->label('Select Assessor')
+                    ->relationship('assessor', 'name')
+                    ->required(),
+                
                 TextInput::make('duration')->readOnly(),
 
 

@@ -19,8 +19,11 @@ return new class extends Migration
             $table->foreignId('criteria_id')->constrained('criterias')->cascadeOnDelete()->cascadeOnUpdate();
             $table->float('score'); // Nilai asli (0-100)
             $table->float('score_fuzzy'); // Hasil konversi ke fuzzy (0, 0.25, 0.5, 0.75, 1)
-            $table->float('score_fuzzy_normalized'); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
-            $table->float('score_final'); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
+            $table->float('score_fuzzy_normalized')->nullable(); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
+            $table->float('score_final')->nullable(); // Nilai ternormalisasi (fuzzy_value / max_per_criteria)
+            $table->timestamps();
+
+            $index = $table->unique(['source_type', 'source_id', 'participant_id', 'criteria_id'], 'unique_fuzzy_score');
         });
     }
 

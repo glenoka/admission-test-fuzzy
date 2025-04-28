@@ -8,15 +8,15 @@ class Evaluation extends Model
 {
     protected $fillable = [
         'assessor_id',
-        'formation_selection_id',
+        'participant_id',
         'date',
     ];
     protected $casts = [
         'date' => 'datetime',
     ];
-    public function formation_selection()
+    public function participant()
     {
-        return $this->belongsTo(Formation_selection::class);
+        return $this->belongsTo(participant::class);
     }
     public function evaluationDetails()
     {

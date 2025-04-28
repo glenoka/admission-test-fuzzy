@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('question_id')->constrained('questions')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('option_id')->constrained('question_options', 'id')->cascadeOnDelete()->cascadeOnUpdate()->nullable();
+            $table->foreignId('option_id')->nullable();
             $table->string('essay_answer')->nullable();
-            $table->integer('score');
+            $table->integer('score')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

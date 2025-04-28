@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('assessors_id')->constrained('assessors')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('formation_selection_id')->constrained('formation_selections')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('assessor_id')->constrained('assessors')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('participant_id')->constrained('participant')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('date'); // Tanggal penilaian
             $table->timestamps();
         });

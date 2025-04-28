@@ -15,8 +15,11 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use App\Filament\Resources\EvaluationResource;
+use App\Models\Formation_Selection;
+use App\Models\FuzzyScore;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
+use FuzzyScoreConvert;
 
 class DoEvaluation extends Page
 {
@@ -114,9 +117,10 @@ public function save(): void
 {
     try {
         $data = $this->form->getState();
-        
+        $score_total=0;
         // Update semua evaluation details
         foreach ($data['evaluationDetails'] as $detail) {
+            $score_total += $detail['score'];
             Evaluation_details::updateOrCreate(
                 [
                     'evaluation_id' => $this->record->id,
@@ -125,6 +129,20 @@ public function save(): void
                 ['score' => $detail['score']]
             );
         }
+        $converter = new FuzzyScoreConvert();
+        $conversion = $converter->convertToFuzzyValue($score_total);
+       
+        $getFormation=Formation_Selection::where('participant_id',$this->record->participant_id)->first();
+        FuzzyScore::updateOrCreate([
+            'source_type' => 2, // 1=exam, 2=evaluation
+            'source_id' => $this->record->id,
+            'participant_id' => $this->record->participant_id,
+            'criteria_id' => 2, // ID dari criteria
+        ],[
+            'score' => $score_total,
+            'formation_id' => $getFormation->formation_id,
+            'score_fuzzy' => $conversion,
+        ]);
 
         Notification::make()
             ->title('Penilaian Tersimpan!')
