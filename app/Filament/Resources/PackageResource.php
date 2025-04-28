@@ -14,6 +14,7 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PackageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -46,11 +47,18 @@ class PackageResource extends Resource
                                     ])
                                     ->required()
                                     ->label('Tipe Soal'),
-                                Forms\Components\Select::make('creteria_id')
-                                    ->options(Criteria::all()->pluck('creteria', 'id'))
+                                
+                                Forms\Components\Select::make('criteria_id')
+                                    ->options(Criteria::pluck('criteria', 'id'))
                                     ->required()
                                     ->label('Creteria'),
-                            ])
+                                    Forms\Components\Select::make('formation_id')
+                                    ->label('Formasi')
+                                    ->relationship('formation', 'name')
+                                    ->required()
+                                    ->label('Formation')
+                                    ->columnSpanFull(),
+                            ])->columns(2),
                     ]),
                 Repeater::make('package_questions')
                     ->relationship('package_questions')
@@ -62,7 +70,7 @@ class PackageResource extends Resource
                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->required(),
                     ])
-            ]);
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -82,8 +90,9 @@ class PackageResource extends Resource
                     ->label('Jumlah Soal')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('creteria.creteria')
+                Tables\Columns\TextColumn::make('criteria.criteria')
                     ->label('Creteria'),
+                Tables\Columns\TextColumn::make('formation.name'),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -99,6 +108,14 @@ class PackageResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('formation')
+                    ->relationship('formation', 'name')
+                    ->indicator('Formasi')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->label('Filter berdasarkan Formasi')
+                    ->placeholder('Semua Formasi'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

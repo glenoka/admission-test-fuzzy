@@ -17,7 +17,8 @@ class Package extends Model
         'duration',
         'type_package',
         'kategory',
-        'creteria_id',
+        'formation_id',
+        'criteria_id',
         'score_max',
 
     ];
@@ -27,8 +28,16 @@ class Package extends Model
 {
     return $this->hasMany(Package_question::class);
 }
-public function creteria(): BelongsTo
+public function criteria(): BelongsTo
 {
     return $this->belongsTo(Criteria::class);
+}
+public function formation(): BelongsTo
+{
+    return $this->belongsTo(Formation::class);
+}
+public function exam(): HasMany
+{
+    return $this->hasMany(Exam::class);
 }
 }

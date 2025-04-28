@@ -98,17 +98,31 @@ class ParticipantResource extends Resource
                             ->afterStateUpdated(fn(Set $set) => $set('village_id', null))
                             ->required(),
 
-                        Select::make('village_id')
+                            Select::make('village_id')
                             ->label('Village')
-                            ->relationship('village', 'name')
+                            ->options(function (Get $get) {
+                                $districtId = $get('district_id');
+                                
+                                if (!$districtId) {
+                                    return Village::query()->limit(50)->pluck('name', 'id');
+                                }
+                                
+                                return Village::where('district_id', $districtId)->pluck('name', 'id');
+                            })
                             ->searchable()
                             ->required()
+                            ->live()
+                            ->placeholder('Select Village')
+                            ->disabled(fn (Get $get): bool => !$get('district_id'))
                             ->afterStateHydrated(function (Set $set, ?string $state) {
-                                $dataVillage = Village::find($state);
-                                if ($dataVillage) {
-                                    $set('district_id', $dataVillage->district_id);
+                                if ($state) {
+                                    $dataVillage = Village::find($state);
+                                    if ($dataVillage) {
+                                        $set('district_id', $dataVillage->district_id);
+                                    }
                                 }
                             }),
+                        
                         TextInput::make('status')
                             ->default('active')
                             ->disabled(),

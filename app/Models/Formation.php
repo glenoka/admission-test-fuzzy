@@ -17,4 +17,7 @@ class Formation extends Model
     public function selections(){
         return $this->hasMany(Formation_Selection::class);
     }
+    public function packages(){
+        return $this->hasMany(Package::class);
+    }
 }

@@ -26,4 +26,9 @@ class CreateParticipant extends CreateRecord
         $saveUser->assignRole('participant');
     return $formData;
     }
+
+    protected function getRedirectUrl(): string
+{
+    return $this->getResource()::getUrl('index');
+}
 }

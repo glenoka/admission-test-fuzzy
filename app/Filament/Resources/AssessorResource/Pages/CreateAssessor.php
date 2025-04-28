@@ -27,7 +27,10 @@ class CreateAssessor extends CreateRecord
 
     return $formData;
     }
-
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 
 
 
