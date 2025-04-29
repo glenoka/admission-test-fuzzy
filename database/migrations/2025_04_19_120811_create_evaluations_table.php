@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('assessor_id')->constrained('assessors')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('participant_id')->constrained('participant')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('participant_id')->constrained('participants')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('date'); // Tanggal penilaian
             $table->timestamps();
         });
