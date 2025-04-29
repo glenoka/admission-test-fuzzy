@@ -21,6 +21,10 @@ class Formation_Selection extends Model
     public function participant(){
         return $this->belongsTo(Participant::class, 'participant_id');
     }
+    public function ranking()
+    {
+        return $this->belongsTo(Ranking::class,'participant_id','participant_id');
+    }
 
     protected static function boot()
 {
