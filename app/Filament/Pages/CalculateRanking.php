@@ -9,8 +9,11 @@ use App\Models\FuzzyScore;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
 use App\Models\Formation_Selection;
+use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Concerns\InteractsWithTable;
 
 class CalculateRanking extends Page implements HasTable
@@ -31,6 +34,7 @@ class CalculateRanking extends Page implements HasTable
 //     {
 //         $this->calculateRanking(1);
 //     }
+
     public function table(Table $table): Table
     {
         return $table
@@ -54,18 +58,43 @@ class CalculateRanking extends Page implements HasTable
                     ->default('N/A'),
             ])
             ->filters([
-                // ...
+                SelectFilter::make('formation')
+                    ->relationship('formation', 'name')
+                    ->indicator('Formasi')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->label('Filter berdasarkan Formasi')
+                    ->placeholder('Semua Formasi'),
             ])
             ->actions([
                 // ...
-            ])
-            ->bulkActions([
-                // ...
+            ])->headerActions([
+                Action::make('Calculate')
+                    ->label('Hitung')
+                    ->requiresConfirmation()
+                    ->action(function (array $data) {
+                        $this->calculateRanking(1);
+                       
+                    })
+                    ->form([
+                        Select::make('formasi')
+                            ->label('Pilih Formasi')
+                            ->options([
+                                'Sekretaris Desa' => 'Sekretaris Desa',
+                                'Staff Administrasi' => 'Staff Administrasi',
+                            ])
+                            ->default('Sekretaris Desa')
+                            ->reactive()
+                    ])
+                    ->color('success')
+                    ->icon('heroicon-o-calculator'),
             ]);
     }
     
     public function calculateRanking(String $formationId): void
     {
+       
         //reset the fuzzy_scores table
         $fuzzyScores=DB::table('fuzzy_scores')
             ->where('formation_id', $formationId)
@@ -92,7 +121,7 @@ class CalculateRanking extends Page implements HasTable
             $score->update([
                 'score_fuzzy_normalized' => $normalizedValue
             ]);
-
+        }
             //Bobot dan Perankingan
             $invalidCriteria = Criteria::whereNull('value')->count();
 
@@ -106,7 +135,7 @@ class CalculateRanking extends Page implements HasTable
 
 
             //simpan di tabel rank  
-            $rankings = FuzzyScore::where('formation_id', 1)
+            $rankings = FuzzyScore::where('formation_id', $formationId)
                 ->select('participant_id', DB::raw('SUM(score_final) as total_score'))
                 ->groupBy('participant_id')
                 ->orderByDesc('total_score')
@@ -116,7 +145,7 @@ class CalculateRanking extends Page implements HasTable
                 DB::table('rankings')->updateOrInsert(
                     [
                         'participant_id' => $ranking->participant_id,
-                        'formation_id' => 1,
+                        'formation_id' => $formationId,
                     ],
                     [
                         'total_score' => $ranking->total_score,
@@ -128,4 +157,4 @@ class CalculateRanking extends Page implements HasTable
 
         }
     }
-}
+

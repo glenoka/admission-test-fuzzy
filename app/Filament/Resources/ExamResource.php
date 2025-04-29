@@ -76,13 +76,14 @@ class ExamResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('participant.name'),
                 TextColumn::make('assessor.name'),
                 TextColumn::make('package.name'),
                 TextColumn::make('started_at')
                 ->default('Not Started'),
-
+                
 
             ])
             ->filters([
