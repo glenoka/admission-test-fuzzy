@@ -186,7 +186,7 @@
 </section>
 
 
-
+{{$session_value='2'}}
 <!-- Formasi section start -->
 <section class="section" id="formasi">
     <div class="container">
@@ -205,14 +205,25 @@
                 </div>
             </div>
         </div>
-
+        <div class="input-group mb-4">
+        <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Cari formasi..." 
+            wire:model.live.debounce.250ms="search"
+        >
+        <span class="input-group-text">
+            <i class="ti ti-search"></i>
+        </span>
+    </div>
         <div class="row g-3">
+            @foreach ($formasi as $formation )     
             <div class="col-lg-4">
                 <div class="card border">
                     <div class="card-body">
                         <img src="{{ asset('images/formasi/tenaga-kesehatan.jpg') }}" alt="Tenaga Kesehatan" class="img-fluid bg-light rounded">
                         <div class="mt-3">
-                            <h5>Tenaga Kesehatan</h5>
+                            <h5>{{$formation->name}}</h5>
                             <p class="text-muted">
                                 <i class="ti ti-briefcase text-primary me-2"></i> 5 formasi tersedia<br>
                                 <i class="ti ti-school text-primary me-2"></i> Minimal D3 Kesehatan<br>
@@ -223,40 +234,9 @@
                     </div>
                 </div>
             </div>
+            @endforeach
             
-            <div class="col-lg-4">
-                <div class="card border">
-                    <div class="card-body">
-                        <img src="{{ asset('images/formasi/administrasi.jpg') }}" alt="Staff Administrasi" class="img-fluid bg-light rounded">
-                        <div class="mt-3">
-                            <h5>Staff Administrasi</h5>
-                            <p class="text-muted">
-                                <i class="ti ti-briefcase text-primary me-2"></i> 8 formasi tersedia<br>
-                                <i class="ti ti-school text-primary me-2"></i> Minimal D3 Semua Jurusan<br>
-                                <i class="ti ti-certificate text-primary me-2"></i> Menguasai Office
-                            </p>
-                            <a href="/formasi/staff-administrasi" class="btn btn-sm btn-outline-primary">Detail Persyaratan</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="card border">
-                    <div class="card-body">
-                        <img src="{{ asset('images/formasi/pengembang-aplikasi.jpg') }}" alt="Pengembang Aplikasi" class="img-fluid bg-light rounded">
-                        <div class="mt-3">
-                            <h5>Pengembang Aplikasi</h5>
-                            <p class="text-muted">
-                                <i class="ti ti-briefcase text-primary me-2"></i> 3 formasi tersedia<br>
-                                <i class="ti ti-school text-primary me-2"></i> S1 Teknik Informatika<br>
-                                <i class="ti ti-certificate text-primary me-2"></i> Portofolio wajib
-                            </p>
-                            <a href="/formasi/pengembang-aplikasi" class="btn btn-sm btn-outline-primary">Detail Persyaratan</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
         </div>
         
         <div class="text-center mt-4">
