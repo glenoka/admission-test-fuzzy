@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Formation_Selection;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
@@ -49,11 +50,13 @@ class CalculateRanking extends Page implements HasTable
                 TextColumn::make('formation.name')
                     ->label('Formasi'),
                     TextColumn::make('ranking.total_score')
+                    ->sortable()
                     ->placeholder('N/A')
                     ->default('N/A'),
                 
                 TextColumn::make('ranking.rank')
                     ->label('Rank')
+                    ->sortable()
                     ->placeholder('N/A')
                     ->default('N/A'),
             ])
@@ -71,20 +74,20 @@ class CalculateRanking extends Page implements HasTable
                 // ...
             ])->headerActions([
                 Action::make('Calculate')
-                    ->label('Hitung')
+                    ->label('Calculate Ranking')
                     ->requiresConfirmation()
                     ->action(function (array $data) {
-                        $this->calculateRanking(1);
+                        $this->calculateRanking($data['formasi']); 
                        
                     })
                     ->form([
                         Select::make('formasi')
                             ->label('Pilih Formasi')
-                            ->options([
-                                'Sekretaris Desa' => 'Sekretaris Desa',
-                                'Staff Administrasi' => 'Staff Administrasi',
-                            ])
-                            ->default('Sekretaris Desa')
+                            ->options(
+                                // Ambil options dari database (pastikan model Formation ada)
+                                Formation::all()->pluck('name', 'id')->toArray()
+                            )
+                          // Ini perlu disesuaikan dengan ID jika ingin default
                             ->reactive()
                     ])
                     ->color('success')
@@ -153,8 +156,10 @@ class CalculateRanking extends Page implements HasTable
                     ]
                 );
             }
-            // Update the rank in the rankings table
-
+            Notification::make()
+                ->title('Ranking berhasil dihitung!')
+                ->success()
+                ->send();
         }
     }
 
