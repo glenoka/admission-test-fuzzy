@@ -22,7 +22,7 @@ class HomePage extends Component
         ->get();
 
         return view('livewire.home-page',compact('formasi'))
-        ->layout('layouts.homepage.layouts.base', [
+        ->layout('layouts.homepage.layouts.main', [
             'title' => 'Home - My Awesome App' // Kirim data ke layout
         ]);;
     }
