@@ -32,29 +32,20 @@
         <div class="navigation lg_992:order-1 lg_992:flex hidden" id="menu-collapse">
             <ul class="navbar-nav" id="navbar-navlist">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#home2">Home</a>
+                    <a class="nav-link active" href="#home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#about">About us</a>
+                    <a class="nav-link" href="#tentang">Tentang Sistem</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#features">Services</a>
+                    <a class="nav-link" href="#tahapan">Tahapan</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#portfolio">Portfolio</a>
+                    <a class="nav-link" href="#formasi">Formasi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#testi">Review</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#pricing">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#blog">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">Contact us</a>
-                </li>                       
+                    <a class="nav-link" href="#contact">Kontak</a>
+                </li>                         
             </ul>
         </div>
     </div>

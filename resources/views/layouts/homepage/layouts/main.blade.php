@@ -31,7 +31,8 @@
 
         <!-- Main Content -->
         <div class="content">
-            {{$slot}}        </div>
+            {{$slot}}        
+        </div>
 
         <!-- includes/footer.blade.php -->
         @include('layouts.homepage.includes.footer')
@@ -54,23 +55,7 @@
         <script src="{{ asset('assets/js/app.js') }}"></script>
         <!-- JAVASCRIPTS -->
 
-        <script>
-            easy_background("#home2",
-                {
-                    slide: ["{{ asset('assets/images/bg/01.png') }}", "{{ asset('assets/images/bg/02.png') }}", "{{ asset('assets/images/bg/03.png') }}"],
-                    delay: [4000, 4000, 4000]
-                }
-            );
-        </script>
-
-        <script>
-            easy_background("#home3",
-                {
-                    slide: ["{{ asset('assets/images/bg/1.jpg') }}", "{{ asset('assets/images/bg/2.jpg') }}", "{{ asset('assets/images/bg/3.jpg') }}"],
-                    delay: [4000, 4000, 4000]
-                }
-            );
-        </script>
+      
 
     </body>
 </html>

@@ -134,7 +134,7 @@ class RegisterPage extends Component implements HasForms
     public function render()
     {
         return view('livewire.register-page') 
-        ->layout('layouts.homepage.layouts.base', [
+        ->layout('layouts.homepage.layouts.main', [
             'title' => 'Register Page' // Kirim data ke layout
         ]);
     }
