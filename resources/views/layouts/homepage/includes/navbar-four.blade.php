@@ -15,17 +15,7 @@
 
         <div class="nav-icons flex items-center lg_992:order-2 ms-auto">
             <!-- Navbar Button -->
-            <ul class="list-none menu-social mb-0">
-                <li class="inline">
-                    <a href="" class="btn btn-sm btn-icon rounded-full bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white"><i class="uil uil-github"></i></a>
-                </li>
-                <li class="inline">
-                    <a href="" class="btn btn-sm btn-icon rounded-full bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white"><i class="uil uil-twitter"></i></a>
-                </li>
-                <li class="inline">
-                    <a href="" class="btn btn-sm btn-icon rounded-full bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white"><i class="uil uil-instagram"></i></a>
-                </li>
-            </ul>
+           
             <!-- Navbar Collapse Manu Button -->
             <button data-collapse="menu-collapse" type="button" class="collapse-btn inline-flex items-center ms-3 text-dark dark:text-white lg_992:hidden" aria-controls="menu-collapse" aria-expanded="false">
                 <span class="sr-only">Navigation Menu</span>

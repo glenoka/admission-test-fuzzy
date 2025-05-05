@@ -13,7 +13,7 @@
                 </p>
             </div>
 
-            <form wire:submit.prevent="create" class="mt-8 space-y-6">
+            <form wire:submit.prevent="create" @csrf>
                 <div class="space-y-4">
                     {{ $this->form }}
                 </div>

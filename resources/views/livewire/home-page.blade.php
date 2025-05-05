@@ -77,7 +77,7 @@
                         </p>
 
                         <div class="relative mt-10">
-                            <a href="/daftar"
+                            <a href="/admin/register"
                                 class="btn bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white rounded-md">
                                 Daftar Sekarang
                             </a>

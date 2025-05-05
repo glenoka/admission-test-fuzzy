@@ -9,6 +9,7 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Districts;
 use App\Models\Formation;
+use App\Models\Formation_Selection;
 use App\Models\Participant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -136,7 +137,10 @@ class Register extends AuthRegister
                 ]),
 
         ])
-            ->statePath('data');
+            ->statePath('data')->extraAttributes([
+                'wire:ignore' => true,
+                'wire:key' => 'register-form' // Unique key
+            ]); // Tambahkan ini;;
     }
     public function rules(): array
     {
@@ -178,9 +182,16 @@ class Register extends AuthRegister
                 'village_id' => $data['village_id'],
                 'image' => $imagePath,
             ]);
-
+            // 3. Selection formasi
+            $formation = Formation::find($data['formation_id']);
+            $savedFormation = Formation_Selection::create([
+                'participant_id' => $Participant->id,
+                'formation_id' => $data['formation_id'],
+            ]);
             return $user;
             $Participant->assignRole('participant');
+            auth()->login($user);
+            session()->regenerateToken(); // Regenerate CSRF token
         });
     }
 
