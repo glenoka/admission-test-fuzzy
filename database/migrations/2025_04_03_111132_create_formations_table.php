@@ -15,6 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->string('village_id')->constrained('villages')->onDelete('cascade');
+            $table->string('district_id')->constrained('districts')->onDelete('cascade');
+            $table->date('due_date');
+            $table->string('status')->default('active');
+            $table->string('education_level');
+            $table->string('open_position');
             $table->softDeletes();
             $table->timestamps();
         });

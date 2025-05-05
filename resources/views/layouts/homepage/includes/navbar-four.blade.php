@@ -1,10 +1,17 @@
 <!-- Navbar Start -->
 <nav class="navbar" id="navbar">
-    <div class="container flex flex-wrap items-center justify-end">
-        <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('assets/images/logo-dark.png') }}" class="inline-block dark:hidden" alt="">
-            <img src="{{ asset('assets/images/logo-light.png') }}" class="hidden dark:inline-block" alt="">
-        </a>
+    <div class="container flex flex-wrap items-center justify-between">
+        <!-- Logo dan Teks -->
+        <div class="flex items-center">
+            <a class="navbar-brand flex items-center" href="{{ url('/') }}">
+                <img src="{{ asset('images/logo_pemkab.png') }}" width="80px" class="inline-block dark:hidden" alt="Logo Pemkab">
+                <img src="{{ asset('images/logo_pemkab.png') }}" class="hidden dark:inline-block" alt="Logo Pemkab">
+                <div class="ml-3">
+                    <div class="text-xl font-bold text-gray-800 dark:text-white">Sistem Seleksi Pegawai</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">Kabupaten Gianyar</div>
+                </div>
+            </a>
+        </div>
 
         <div class="nav-icons flex items-center lg_992:order-2 ms-auto">
             <!-- Navbar Button -->
@@ -16,9 +23,7 @@
                     <a href="" class="btn btn-sm btn-icon rounded-full bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white"><i class="uil uil-twitter"></i></a>
                 </li>
                 <li class="inline">
-                    <a href="">
-                        <a href="" class="btn btn-sm btn-icon rounded-full bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white"><i class="uil uil-instagram"></i></a>
-                    </a>
+                    <a href="" class="btn btn-sm btn-icon rounded-full bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white"><i class="uil uil-instagram"></i></a>
                 </li>
             </ul>
             <!-- Navbar Collapse Manu Button -->
@@ -28,7 +33,7 @@
             </button>
         </div>
 
-        <!-- Navbar Manu -->
+        <!-- Navbar Menu -->
         <div class="navigation lg_992:order-1 lg_992:flex hidden" id="menu-collapse">
             <ul class="navbar-nav" id="navbar-navlist">
                 <li class="nav-item">

@@ -20,7 +20,7 @@
                     </p>
 
                     <div class="relative mt-10">
-                        <a href="/daftar"
+                        <a href="/admin/register"
                             class="btn bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white rounded-full me-1">
                             Daftar Sekarang
                         </a>
@@ -197,64 +197,101 @@
     <section class="relative md:py-24 py-16 bg-gray-50 " id="formasi">
         <div class="container">
             <div class="grid grid-cols-1 pb-8 text-center">
-                <h6 class="text-orange-600 text-base font-medium uppercase mb-2">Portfolio</h6>
-                <h3 class="mb-4 md:text-2xl text-xl font-medium ">Our Works & Projects</h3>
+                <h6 class="text-orange-600 text-base font-medium uppercase mb-2">FORMASI PEKERJAAN</h6>
+                <h3 class="mb-4 md:text-2xl text-xl font-medium">Temukan Formasi Yang Tepat</h3>
 
-                <p class="text-slate-400 max-w-xl mx-auto">Launch your campaign and benefit from our expertise on
-                    designing and managing conversion centered Tailwind CSS html page.</p>
-            </div><!--end grid-->
+                <p class="text-slate-400 max-w-xl mx-auto">Jelajahi berbagai posisi yang sesuai dengan keahlian dan passion Anda untuk membangun karir yang cemerlang</p>
+            </div>
 
             <!-- Search Bar -->
             <div class="mb-8 w-full">
                 <div class="relative">
                     <input type="text"
                         class="w-full py-3 px-4 rounded-lg border border-slate-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
-                        placeholder="Cari lowongan...">
+                        placeholder="Cari lowongan..." wire:model.live.bounce(500)="search">
                     <button class="absolute right-2 top-2 bg-orange-500 text-white p-2 rounded-md hover:bg-orange-600">
                         <i class="mdi mdi-magnify"></i>
                     </button>
                 </div>
             </div>
 
+
             <!-- Lowongan Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-orange-100 text-orange-600 text-sm px-3 py-1 rounded-full">PNS</span>
-                        <span class="text-slate-400 text-sm">Batas: 30 Sept 2024</span>
+            <!-- Grid Container -->
+            <div class="grid grid-cols-3 gap-2">
+                @if($dataformasi->count() > 0)
+                @foreach ($dataformasi as $for)
+                <!-- Card -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-5 border border-gray-100">
+                    <!-- Badge dan Deadline -->
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-orange-50 text-orange-600 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                            <span class="mdi mdi-clock-outline mr-1"></span>
+                            Pegawai
+                        </span>
+                        <span class="text-gray-400 text-xs flex items-center">
+                            <span class="mdi mdi-calendar-clock mr-1"></span>
+                            Batas: {{ \Carbon\Carbon::parse($for->due_date)->format('d M Y') }}
+                        </span>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Analis Keuangan</h3>
-                    <div class="flex items-center text-slate-500 mb-4">
-                        <i class="mdi mdi-map-marker-outline mr-2"></i>
-                        Gianyar, Bali
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-orange-600 font-medium">Golongan III</p>
-                            <p class="text-sm text-slate-400">SKM: 350</p>
+
+                    <!-- Judul Posisi -->
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">{{$for->name}}</h3>
+
+                    <!-- Meta Info -->
+                    <div class="space-y-2 mb-4">
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <span class="mdi mdi-map-marker-outline mr-2"></span>
+                            {{$for->village->name}}
                         </div>
-                        <a href="#"
-                            class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Detail</a>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <span class="mdi mdi-school-outline mr-2"></span>
+                            {{$for->education_level}}
+                        </div>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <span class="mdi mdi-account-multiple-outline mr-2"></span>
+                            {{$for->open_position}} Lowongan Tersedia
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+                        <a href="/admin/register/{{ $for->id }}" class="text-orange-600 hover:text-orange-700 text-sm font-medium flex items-center">
+                            Daftar
+                            <span class="mdi mdi-chevron-right ml-1"></span>
+                        </a>
                     </div>
                 </div>
+                @endforeach
+                @else
+                <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100 text-center">
+                    <div class="mx-auto w-24 h-24 flex items-center justify-center bg-gray-100 rounded-full mb-4">
+                        <span class="mdi mdi-briefcase-off text-4xl text-gray-400"></span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Tidak Ada Lowongan Tersedia</h3>
+                    <p class="text-gray-500 mb-4">Saat ini tidak ada formasi/lowongan yang dibuka.</p>
 
+                </div>
+                @endif
 
             </div>
+
 
             <!-- Tombol Lihat Lainnya -->
             <div class="mt-8 text-center">
-                <button id="loadMore"
-                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition-colors duration-300">
-                    Lihat Lainnya (4 Lowongan)
-                </button>
-            </div>
+    @if($dataformasi->hasMorePages())
+        <button wire:click="loadMore" 
+                class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition-colors duration-300">
+            Lihat Lainnya 
+        </button>
+    @endif
+</div>
         </div>
     </section>
 
 
-            <!-- Start -->
-            {{-- <section class="relative md:py-24 py-16" id="blog">
+    <!-- Start -->
+    {{-- <section class="relative md:py-24 py-16" id="blog">
     <div class="container">
         <div class="grid grid-cols-1 pb-8 text-center">
             <h6 class="text-orange-600 text-base font-medium uppercase mb-2">Blogs</h6>
@@ -273,90 +310,91 @@
 </section><!--end section-->
 <!-- End --> --}}
 
-            <!-- Start -->
-            <section class="relative md:py-24 py-16" id="contact">
-                <div class="container">
-                    <div class="grid grid-cols-1 pb-8 text-center">
-                        <h6 class="text-orange-600 text-base font-medium uppercase mb-2">Contact us</h6>
-                        <h3 class="mb-4 md:text-2xl text-xl font-medium ">Get In Touch !</h3>
+    <!-- Start -->
+    <section class="relative md:py-24 py-16" id="contact">
+        <div class="container">
+        <div class="grid grid-cols-1 pb-8 text-center">
+    <h6 class="text-orange-600 text-base font-medium uppercase mb-2">HUBUNGI KAMI</h6>
+    <h3 class="mb-4 md:text-2xl text-xl font-medium">Butuh Bantuan?</h3>
 
-                        <p class="text-slate-400 max-w-xl mx-auto">Launch your campaign and benefit from our expertise
-                            on designing and managing conversion centered Tailwind CSS html page.</p>
-                    </div><!--end grid-->
+    <p class="text-slate-400 max-w-xl mx-auto">
+        Tim seleksi Kabupaten Gianyar siap membantu Anda. Hubungi kami melalui layanan kontak berikut untuk informasi lebih lanjut mengenai proses seleksi.
+    </p>
+</div><!--end grid-->
 
-                    <div class="grid grid-cols-1 lg:grid-cols-12 md:grid-cols-2 mt-8 items-center gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 md:grid-cols-2 mt-8 items-center gap-6">
 
-                        <!-- includes/Index/contact.blade.php -->
-                        <div class="lg:col-span-8">
-                            <div class="p-6 rounded-md shadow-sm bg-white dark:bg-slate-900">
-                                <form method="POST" action="#" name="myForm" id="myForm" onsubmit="return validateForm()">
-                                    @csrf
-                                    <p class="mb-0" id="error-msg"></p>
-                                    <div id="simple-msg"></div>
-                                    <div class="grid lg:grid-cols-12 lg:gap-6">
-                                        <div class="lg:col-span-6 mb-5">
-                                            <input name="name" id="name" type="text" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-10 outline-none" placeholder="Name :">
-                                        </div>
-                        
-                                        <div class="lg:col-span-6 mb-5">
-                                            <input name="email" id="email" type="email" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-10 outline-none" placeholder="Email :">
-                                        </div><!--end col-->
-                                    </div>
-                        
-                                    <div class="grid grid-cols-1">
-                                        <div class="mb-5">
-                                            <input name="subject" id="subject" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-10 outline-none" placeholder="Subject :">
-                                        </div>
-                        
-                                        <div class="mb-5">
-                                            <textarea name="comments" id="comments" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-28 outline-none textarea" placeholder="Message :"></textarea>
-                                        </div>
-                                    </div>
-                                    <button type="submit" id="submit" name="send" class="btn bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white rounded-md h-11 justify-center flex items-center">Send Message</button>
-                                </form>
+                <!-- includes/Index/contact.blade.php -->
+                <div class="lg:col-span-8">
+                    <div class="p-6 rounded-md shadow-sm bg-white dark:bg-slate-900">
+                        <form method="POST" action="#" name="myForm" id="myForm" onsubmit="return validateForm()">
+                            @csrf
+                            <p class="mb-0" id="error-msg"></p>
+                            <div id="simple-msg"></div>
+                            <div class="grid lg:grid-cols-12 lg:gap-6">
+                                <div class="lg:col-span-6 mb-5">
+                                    <input name="name" id="name" type="text" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-10 outline-none" placeholder="Name :">
+                                </div>
+
+                                <div class="lg:col-span-6 mb-5">
+                                    <input name="email" id="email" type="email" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-10 outline-none" placeholder="Email :">
+                                </div><!--end col-->
                             </div>
-                        </div>
-                        
-                        <div class="lg:col-span-4">
-                            <div class="lg:ms-8">
-                                <div class="flex">
-                                    <div class="icons text-center mx-auto">
-                                        <i class="uil uil-phone block rounded text-2xl dark:text-white mb-0"></i>
-                                    </div>
-                        
-                                    <div class="flex-1 ms-6">
-                                        <h5 class="text-lg dark:text-white mb-2 font-medium">Phone</h5>
-                                        <a href="tel:+152534-468-854" class="text-slate-400">+152 534-468-854</a>
-                                    </div>
+
+                            <div class="grid grid-cols-1">
+                                <div class="mb-5">
+                                    <input name="subject" id="subject" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-10 outline-none" placeholder="Subject :">
                                 </div>
-                        
-                                <div class="flex mt-4">
-                                    <div class="icons text-center mx-auto">
-                                        <i class="uil uil-envelope block rounded text-2xl dark:text-white mb-0"></i>
-                                    </div>
-                        
-                                    <div class="flex-1 ms-6">
-                                        <h5 class="text-lg dark:text-white mb-2 font-medium">Email</h5>
-                                        <a href="mailto:contact@example.com" class="text-slate-400">contact@example.com</a>
-                                    </div>
+
+                                <div class="mb-5">
+                                    <textarea name="comments" id="comments" class="form-input w-full py-2 px-3 border border-gray-200 dark:border-gray-800 focus:ring-0 focus:border-orange-600/50 dark:bg-slate-900 dark:text-slate-200 rounded h-28 outline-none textarea" placeholder="Message :"></textarea>
                                 </div>
-                        
-                                <div class="flex mt-4">
-                                    <div class="icons text-center mx-auto">
-                                        <i class="uil uil-map-marker block rounded text-2xl dark:text-white mb-0"></i>
-                                    </div>
-                        
-                                    <div class="flex-1 ms-6">
-                                        <h5 class="text-lg dark:text-white mb-2 font-medium">Location</h5>
-                                        <p class="text-slate-400 mb-2">C/54 Northwest Freeway, Suite 558, Houston, USA 485</p>
-                                    </div>
-                                </div>
+                            </div>
+                            <button type="submit" id="submit" name="send" class="btn bg-orange-600 hover:bg-orange-700 border-orange-600 hover:border-orange-700 text-white rounded-md h-11 justify-center flex items-center">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4">
+                    <div class="lg:ms-8">
+                        <div class="flex">
+                            <div class="icons text-center mx-auto">
+                                <i class="uil uil-phone block rounded text-2xl dark:text-white mb-0"></i>
+                            </div>
+
+                            <div class="flex-1 ms-6">
+                                <h5 class="text-lg dark:text-white mb-2 font-medium">Phone</h5>
+                                <a href="tel:+152534-468-854" class="text-slate-400">(0361) 943582</a>
                             </div>
                         </div>
 
-                    </div><!--end grid-->
-                </div><!--end container-->
-            </section><!--end section-->
-            <!-- End -->
+                        <div class="flex mt-4">
+                            <div class="icons text-center mx-auto">
+                                <i class="uil uil-envelope block rounded text-2xl dark:text-white mb-0"></i>
+                            </div>
 
-        </div>
+                            <div class="flex-1 ms-6">
+                                <h5 class="text-lg dark:text-white mb-2 font-medium">Email</h5>
+                                <a href="mailto:contact@example.com" class="text-slate-400">cseleksi@gianyarkab.go.id</a>
+                            </div>
+                        </div>
+
+                        <div class="flex mt-4">
+                            <div class="icons text-center mx-auto">
+                                <i class="uil uil-map-marker block rounded text-2xl dark:text-white mb-0"></i>
+                            </div>
+
+                            <div class="flex-1 ms-6">
+                                <h5 class="text-lg dark:text-white mb-2 font-medium">Location</h5>
+                                <p class="text-slate-400 mb-2">Jl. Ciung Wanara No.2, Gianyar, Bali</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--end grid-->
+        </div><!--end container-->
+    </section><!--end section-->
+    <!-- End -->
+
+</div>

@@ -8,12 +8,14 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Districts;
+use App\Models\Formation;
 use App\Models\Participant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Blade;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
@@ -24,82 +26,114 @@ use Filament\Pages\Auth\Register as AuthRegister;
 
 class Register extends AuthRegister
 {
+
+    public $idFormation;
+    
     protected function getCsrfToken(): HtmlString
     {
         return new HtmlString(Blade::render('@csrf'));
     }
+    public static function getRouteName(): string
+    {
+        return 'filament.auth.register';
+    }
+
+    public function mount($formation=null ): void
+    {
+    $this->idFormation = $formation;
+    $this->form->fill();
+
+        
+    }
     public function form(Form $form): Form
     {
         return $form->schema([
-            TextInput::make('name')
-                ->reactive()
-                // Memperbaiki copy email ke field email user
-                ->afterStateUpdated(function (Set $set, ?string $state) {
-                    if ($state) {
-                        $set('user.name', $state);
-                    }
-                }),
-            TextInput::make('nik')->required()
-                ->label('NIK')
-                ->maxLength(16)
-                ->minLength(16)
-                ->numeric()
-                ->unique(Participant::class, 'nik', ignoreRecord: true),
-            TextInput::make('place_of_birth')->required(),
-            DatePicker::make('date_of_birth'),
-            Select::make('gender')->required()
-                ->options([
-                    'male' => 'Laki-laki',
-                    'female' => 'Perempuan',
+
+            Section::make('Formasi Pendaftaran')
+                ->description('Sebelum mendaftar, pilih formasi yang diinginkan')
+                ->schema([
+                    Select::make('formation_id')
+                    ->label('Formasi')
+                    ->options(Formation::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->placeholder('Pilih Formasi')
+                    ->required()
+                    ->default($this->idFormation),
                 ]),
-            TextInput::make('telp')->required(),
-            Select::make('religion')->required()
-                ->options([
-                    'islam' => 'Islam',
-                    'kristen' => 'Kristen',
-                    'katolik' => 'Katolik',
-                    'hindu' => 'Hindu',
-                    'budha' => 'Budha',
-                    'konghucu' => 'Konghucu',
-                    'lainnya' => 'Lainnya',
+            Section::make('Data Diri')
+                ->description('Lengkapi data diri anda dengan benar')
+                ->schema([
+                    TextInput::make('name')
+                        ->reactive()
+                        // Memperbaiki copy email ke field email user
+                        ->afterStateUpdated(function (Set $set, ?string $state) {
+                            if ($state) {
+                                $set('user.name', $state);
+                            }
+                        }),
+                    TextInput::make('nik')->required()
+                        ->label('NIK')
+                        ->maxLength(16)
+                        ->minLength(16)
+                        ->numeric()
+                        ->unique(Participant::class, 'nik', ignoreRecord: true),
+                    TextInput::make('place_of_birth')->required(),
+                    DatePicker::make('date_of_birth'),
+                    Select::make('gender')->required()
+                        ->options([
+                            'male' => 'Laki-laki',
+                            'female' => 'Perempuan',
+                        ]),
+                    TextInput::make('telp')->required(),
+                    Select::make('religion')->required()
+                        ->options([
+                            'islam' => 'Islam',
+                            'kristen' => 'Kristen',
+                            'katolik' => 'Katolik',
+                            'hindu' => 'Hindu',
+                            'budha' => 'Budha',
+                            'konghucu' => 'Konghucu',
+                            'lainnya' => 'Lainnya',
+                        ]),
+                    Textarea::make('address')->required(),
+                    Select::make('district_id')
+                        ->label('District')
+                        ->options(Districts::pluck('name', 'id'))
+                        ->live()
+                        ->afterStateUpdated(fn(Set $set) => $set('village_id', null)),
+
+                    Select::make('village_id')->required()
+                        ->label('Village')
+                        ->options(function (Get $get) {
+                            $districtId = $get('district_id');
+
+                            if (!$districtId) {
+                                return [];
+                            }
+
+                            return Village::where('district_id', $districtId)
+                                ->pluck('name', 'id');
+                        })
+                        ->searchable(),
+                    FileUpload::make('image')->image()
+                        ->directory('participant')->columnSpanFull()
+                        ->deleteUploadedFileUsing(
+                            function ($state) {
+                                if ($state) {
+                                    Storage::disk('public')->delete($state);
+                                }
+                            }
+                        ),
+                    TextInput::make('username')->required()
+                        ->label('Username')
+                        ->maxLength(16)
+                        ->minLength(6)
+                        ->unique(User::class, 'username', ignoreRecord: true),
+                    $this->getEmailFormComponent(),
+                    $this->getPasswordFormComponent(),
+                    $this->getPasswordConfirmationFormComponent(),
+                    // ...
                 ]),
-            Textarea::make('address')->required(),
-            Select::make('district_id')
-                ->label('District')
-                ->options(Districts::pluck('name', 'id'))
-                ->live()
-                ->afterStateUpdated(fn(Set $set) => $set('village_id', null)),
-
-            Select::make('village_id')->required()
-                ->label('Village')
-                ->options(function (Get $get) {
-                    $districtId = $get('district_id');
-
-                    if (!$districtId) {
-                        return [];
-                    }
-
-                    return Village::where('district_id', $districtId)
-                        ->pluck('name', 'id');
-                })
-                ->searchable(),
-            FileUpload::make('image')->image()
-                ->directory('participant')->columnSpanFull()
-                ->deleteUploadedFileUsing(
-                    function ($state) {
-                        if ($state) {
-                            Storage::disk('public')->delete($state);
-                        }
-                    }
-                ),
-            TextInput::make('username')->required()
-                ->label('Username')
-                ->maxLength(16)
-                ->minLength(6)
-                ->unique(User::class, 'username', ignoreRecord: true),
-            $this->getEmailFormComponent(),
-            $this->getPasswordFormComponent(),
-            $this->getPasswordConfirmationFormComponent(),
 
         ])
             ->statePath('data');

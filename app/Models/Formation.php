@@ -12,6 +12,13 @@ class Formation extends Model
     protected $fillable = [
         'name',
         'description',
+        'village_id',
+        'district_id',
+        'due_date',
+        'status',
+        'education_level',
+        'open_position',
+
     ];
 
     public function selections(){
@@ -19,5 +26,11 @@ class Formation extends Model
     }
     public function packages(){
         return $this->hasMany(Package::class);
+    }
+    public function village(){
+        return $this->belongsTo(Village::class);
+    }
+    public function district(){
+        return $this->belongsTo(Districts::class);
     }
 }

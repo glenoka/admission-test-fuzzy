@@ -11,17 +11,28 @@ class HomePage extends Component
     
     
     public $search = '';
-
+    public $formasi;
+    public $perPage = 3;
+    public $loaded = 3;
+   
+    
+    public function loadMore()
+    {
+        $this->loaded += $this->perPage;
+    }
+    
+    
     
     public function render()
     {
-        $formasi = Formation::when($this->search, function($query) {
+        $dataformasi = Formation::when($this->search, function($query) {
             return $query->where('name', 'like', '%'.$this->search.'%');
         })
-        ->limit(6) // Batasi untuk preview
-        ->get();
-
-        return view('livewire.home-page',compact('formasi'))
+        ->with(['village', 'district'])
+        ->where('status', 'active')
+        ->paginate($this->loaded);
+       
+        return view('livewire.home-page',compact('dataformasi'))
         ->layout('layouts.homepage.layouts.main', [
             'title' => 'Home - My Awesome App' // Kirim data ke layout
         ]);;
