@@ -2,6 +2,8 @@
 
 namespace App\Filament\Auth;
 
+
+
 use App\Models\User;
 use App\Models\Village;
 use Filament\Forms\Get;
@@ -9,11 +11,14 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Districts;
 use App\Models\Formation;
-use App\Models\Formation_Selection;
 use App\Models\Participant;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
+use App\Models\Formation_Selection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Blade;
 use Filament\Forms\Components\Section;
@@ -30,10 +35,7 @@ class Register extends AuthRegister
 
     public $idFormation;
     
-    protected function getCsrfToken(): HtmlString
-    {
-        return new HtmlString(Blade::render('@csrf'));
-    }
+   
     public static function getRouteName(): string
     {
         return 'filament.auth.register';
@@ -64,6 +66,8 @@ class Register extends AuthRegister
             Section::make('Data Diri')
                 ->description('Lengkapi data diri anda dengan benar')
                 ->schema([
+                    Hidden::make('_token')
+                ->default(csrf_token()),
                     TextInput::make('name')
                         ->reactive()
                         // Memperbaiki copy email ke field email user
@@ -137,10 +141,7 @@ class Register extends AuthRegister
                 ]),
 
         ])
-            ->statePath('data')->extraAttributes([
-                'wire:ignore' => true,
-                'wire:key' => 'register-form' // Unique key
-            ]); // Tambahkan ini;;
+            ->statePath('data');
     }
     public function rules(): array
     {
@@ -149,11 +150,15 @@ class Register extends AuthRegister
             'email' => $this->getEmailValidationRules(),
             'password' => $this->getPasswordValidationRules(),
             'nik' => ['required', 'unique:participants,nik'],
+            'formation_id'=>'required',
             
         ];
     }
     protected function handleRegistration(array $data): User
     {
+      
+       try {
+
         return DB::transaction(function () use ($data) {
             // 1. Buat user terlebih dahulu
             $user = User::create([
@@ -167,7 +172,7 @@ class Register extends AuthRegister
                 $imagePath = $this->handleImageUpload($data['image']);
             }
             // 2. Buat participant dengan relasi ke user
-            $Participant=Participant::create([
+            $participant=Participant::create([
                 'user_id' => $user->id,
                 'nik' => $data['nik'],
                 'name' => $data['name'],
@@ -185,14 +190,21 @@ class Register extends AuthRegister
             // 3. Selection formasi
             $formation = Formation::find($data['formation_id']);
             $savedFormation = Formation_Selection::create([
-                'participant_id' => $Participant->id,
+                'participant_id' => $participant->id,
                 'formation_id' => $data['formation_id'],
             ]);
+            
+            $participant->user->assignRole('participant');
+           
             return $user;
-            $Participant->assignRole('participant');
-            auth()->login($user);
-            session()->regenerateToken(); // Regenerate CSRF token
+       
         });
+
+
+       } catch (\Exception $e) {
+    Log::error('Registration error: ' . $e->getMessage());
+    throw $e; // atau return error yang sesuai
+}
     }
 
     private function handleImageUpload($file): ?string
