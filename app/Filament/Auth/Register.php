@@ -41,9 +41,10 @@ class Register extends AuthRegister
         return 'filament.auth.register';
     }
 
-    public function mount($formation=null ): void
+    public function mount($formation=null): void
     {
     $this->idFormation = $formation;
+
     $this->form->fill();
 
         

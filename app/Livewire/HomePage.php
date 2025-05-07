@@ -29,9 +29,9 @@ class HomePage extends Component
             return $query->where('name', 'like', '%'.$this->search.'%');
         })
         ->with(['village', 'district'])
-        ->where('status', 'active')
+      
         ->paginate($this->loaded);
-       
+
         return view('livewire.home-page',compact('dataformasi'))
         ->layout('layouts.homepage.layouts.main', [
             'title' => 'Home - My Awesome App' // Kirim data ke layout
