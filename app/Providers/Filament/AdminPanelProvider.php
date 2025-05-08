@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Filament\Auth\Register;
 use App\Filament\Auth\RegisterCustom;
+use App\Livewire\RegisterPage;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Route;
 use Filament\Http\Middleware\Authenticate;
@@ -48,7 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                
             ])
             ->middleware([
                 EncryptCookies::class,

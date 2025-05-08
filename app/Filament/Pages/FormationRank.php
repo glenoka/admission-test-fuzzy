@@ -33,14 +33,16 @@ class FormationRank extends Page implements HasForms, HasTable
     public $rankData=[];
     public $formation;
     public $rank;
+    public $user;
 
 
     public function mount(){
-        $this->participant=Participant::where('user_id','3')->first();
-     
+        $this->user = auth::user()->id;
+        $this->participant=Participant::where('user_id',$this->user)->first();
+    
         $this->formation=Formation_Selection::where('participant_id',$this->participant->id)->first();
         $this->rankData=Ranking::where('formation_id',$this->formation->formation_id)->with('participant','formation')->get();
-        $this->rank=Ranking::where('participant_id','3')->first();
+        $this->rank=Ranking::where('participant_id',$this->participant->id)->first();
         
     }
 

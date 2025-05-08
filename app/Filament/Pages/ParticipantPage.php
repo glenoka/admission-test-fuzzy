@@ -41,7 +41,7 @@ class ParticipantPage extends Page
     public ?array $data = [];
     public $user;
     public $participant;
-    public $isEmpty = false;
+   
 
     public function mount(): void
     {
@@ -49,7 +49,7 @@ class ParticipantPage extends Page
         $this->user = auth::user()->id;
         $this->participant = Participant::where('user_id', $this->user)->with('user')->first();
         // Set flag isEmpty menjadi true jika participant kosong
-    $this->isEmpty = empty($this->participant);
+   
    
 
         $this->form->fill([
@@ -132,7 +132,8 @@ class ParticipantPage extends Page
                     TextInput::make('telp'),
                     TextInput::make('email'),
                     Textarea::make('address'),
-                    FileUpload::make('image'),
+                    TextInput::make('image')
+                    ->type('file'),
 
                     TextInput::make('username')->disabled(),
                     TextInput::make('user.password')->placeholder('Kosongkan jika tidak dirubah'),
