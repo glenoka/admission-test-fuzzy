@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Filament\Auth\Register;
 use App\Filament\Auth\RegisterCustom;
+use App\Filament\Widgets\ParticipantOverview;
 use App\Livewire\RegisterPage;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Route;
@@ -38,9 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
                
-
 
             ])
             ->routes(function () {
@@ -49,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                ParticipantOverview::class,
                 
             ])
             ->middleware([
