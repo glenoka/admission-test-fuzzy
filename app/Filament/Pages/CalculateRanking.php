@@ -11,17 +11,18 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Formation_Selection;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
-use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Notifications\Notification;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Concerns\InteractsWithTable;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class CalculateRanking extends Page implements HasTable
 
 {
     use InteractsWithTable;
-
+    use HasPageShield;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.pages.calculate-ranking';

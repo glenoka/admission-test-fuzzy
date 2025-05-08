@@ -3,19 +3,21 @@
 namespace App\Filament\Pages;
 
 use App\Models\Exam;
-use App\Models\Participant;
 use Filament\Pages\Page;
 use Filament\Tables\Table;
+use App\Models\Participant;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Builder;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class ExamResultsPage extends Page implements HasTable
 {
     use InteractsWithTable;
+    use HasPageShield;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Scoring & Result';
     protected static string $view = 'filament.pages.exam-results-page';

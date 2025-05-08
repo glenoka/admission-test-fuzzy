@@ -7,8 +7,8 @@
                 <img src="{{ asset('images/logo_pemkab.png') }}" width="80px" class="inline-block dark:hidden" alt="Logo Pemkab">
                 <img src="{{ asset('images/logo_pemkab.png') }}" class="hidden dark:inline-block" alt="Logo Pemkab">
                 <div class="ml-3">
-                    <div class="text-xl font-bold text-gray-800 dark:text-white">Sistem Seleksi Pegawai</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">Kabupaten Gianyar</div>
+                    <div class="text-xl font-bold text-gray-800 ">Sistem Seleksi Pegawai</div>
+                    <div class="text-sm text-gray-600 ">Kabupaten Gianyar</div>
                 </div>
             </a>
         </div>

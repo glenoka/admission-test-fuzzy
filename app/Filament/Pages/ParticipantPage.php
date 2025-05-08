@@ -18,33 +18,39 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
+use Filament\Notifications\Notification;
 
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
-use Filament\Notifications\Notification;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class ParticipantPage extends Page
 {
-
+    use HasPageShield;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.pages.participant-page';
 
     protected static ?string $title = 'Participant Page';
-
-
+    
+  
     public ?array $data = [];
     public $user;
     public $participant;
+    public $isEmpty = false;
 
     public function mount(): void
     {
-        $this->user = '3';
+       
+        $this->user = auth::user()->id;
         $this->participant = Participant::where('user_id', $this->user)->with('user')->first();
+        // Set flag isEmpty menjadi true jika participant kosong
+    $this->isEmpty = empty($this->participant);
+   
 
         $this->form->fill([
             'name' => $this->participant->name,
@@ -62,6 +68,7 @@ class ParticipantPage extends Page
             'status' => $this->participant->status,
             'username'=>$this->participant->user->username
         ]);
+    
     }
 
     public function form(Form $form): Form

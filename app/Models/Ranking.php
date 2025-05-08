@@ -31,4 +31,6 @@ class Ranking extends Model
         return $this->hasMany(Formation_Selection::class);
     }
 
+    
+
 }

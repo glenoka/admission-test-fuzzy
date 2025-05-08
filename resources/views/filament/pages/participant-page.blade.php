@@ -1,5 +1,6 @@
 <x-filament-panels::page>
 
+
 {{ $this->participantInfo }}
 <x-filament::section>
 <x-slot name="heading">
@@ -13,5 +14,6 @@ Form Edit Participant
     </x-filament::button>
     </form>
 </x-filament::section>
+
 
 </x-filament-panels::page>
