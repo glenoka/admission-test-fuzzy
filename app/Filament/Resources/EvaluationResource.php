@@ -27,7 +27,9 @@ class EvaluationResource extends Resource
 {
     protected static ?string $model = Evaluation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    protected static ?string $navigationLabel = 'Penilaian Praktek';
+    protected static ?string $navigationGroup='Manajemen Soal';
     public static function getPermissionPrefix(): string
     {
         return 'Admin Evaluation';
@@ -93,7 +95,7 @@ class EvaluationResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->visible(function ($record) {
-                        return $record->started_at == null && Auth::user()->hasRole('super_admin');
+                        return $record->started_at == null && Auth::user()->hasRole('assessor');
                     }),
                 Action::make('doEvaluation')
                     ->label('Evaluate')

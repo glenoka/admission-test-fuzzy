@@ -20,8 +20,9 @@ class VillageResource extends Resource
 {
     protected static ?string $model = Village::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationLabel = 'Desa';
+    protected static ?string $navigationGroup='Manajemen Data';
     public static function form(Form $form): Form
     {
         return $form

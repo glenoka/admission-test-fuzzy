@@ -31,8 +31,9 @@ class AssessorResource extends Resource
 {
     protected static ?string $model = Assessor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationLabel = 'Pengawas';
+    protected static ?string $navigationGroup='Manajemen User';
     public static function form(Form $form): Form
     {
         return $form

@@ -24,7 +24,8 @@ class CalculateRanking extends Page implements HasTable
     use InteractsWithTable;
     use HasPageShield;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-
+    protected static ?string $navigationLabel = 'Result';
+    protected static ?string $navigationGroup='Kalkulasi Rank';
     protected static string $view = 'filament.pages.calculate-ranking';
 
 

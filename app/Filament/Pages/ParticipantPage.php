@@ -31,11 +31,13 @@ use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 class ParticipantPage extends Page
 {
     use HasPageShield;
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-home';
 
     protected static string $view = 'filament.pages.participant-page';
 
     protected static ?string $title = 'Participant Page';
+    protected static ?string $navigationLabel = 'Halaman Utama';
+    protected static ?string $navigationGroup='Home';
     
   
     public ?array $data = [];

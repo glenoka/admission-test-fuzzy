@@ -23,8 +23,9 @@ class FormationSelectionResource extends Resource
 {
     protected static ?string $model = Formation_Selection::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-swatch';
+    protected static ?string $navigationLabel = 'Seleksi Peserta';
+    protected static ?string $navigationGroup='Manajemen Formasi';
     
     public static function getEloquentQuery(): Builder
     {

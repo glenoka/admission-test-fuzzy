@@ -19,8 +19,9 @@ class DistrictsResource extends Resource
 {
     protected static ?string $model = Districts::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static ?string $navigationLabel = 'Kecamatan';
+    protected static ?string $navigationGroup='Manajemen Data';
     public static function form(Form $form): Form
     {
         return $form

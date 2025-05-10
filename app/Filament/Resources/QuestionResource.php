@@ -24,8 +24,9 @@ class QuestionResource extends Resource
 {
     protected static ?string $model = Question::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-bars-arrow-down';
+    protected static ?string $navigationLabel = 'Data Soal';
+    protected static ?string $navigationGroup='Manajemen Soal';
     public static function form(Form $form): Form
     {
         return $form

@@ -20,8 +20,9 @@ class SectionResource extends Resource
 {
     protected static ?string $model = Section::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
+    protected static ?string $navigationLabel = 'Data Penilaian Praktek';
+    protected static ?string $navigationGroup='Manajemen Soal';
     public static function form(Form $form): Form
     {
         return $form
