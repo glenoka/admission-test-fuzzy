@@ -16,7 +16,7 @@ class Evaluation extends Model
     ];
     public function participant()
     {
-        return $this->belongsTo(participant::class);
+        return $this->belongsTo(Participant::class);
     }
     public function evaluationDetails()
     {
