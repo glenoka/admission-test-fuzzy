@@ -9,14 +9,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <!-- Text Content -->
                 <div class="order-2 md:order-1 mt-12 md:mt-0">
-                    <h4 class="lg:text-5xl text-4xl lg:leading-normal leading-normal font-medium mb-7">
-                        Sistem Seleksi Pegawai <br> Kabupaten Gianyar
-                    </h4>
+                    <h4 class="lg:text-3xl text-2xl lg:leading-snug leading-normal font-bold mb-7 text-[#f54900] font-['Poppins'] drop-shadow-lg">
+    Sistem Informasi Seleksi Sumber Daya Manusia Desa<br> Kabupaten Gianyar
+</h4>
+
 
                     <p class="text-slate-400 mb-0 max-w-2xl text-lg">
-                        Selamat datang di sistem seleksi terbuka dan transparan Pemerintah Kabupaten Gianyar. Daftarkan
-                        diri Anda untuk berpartisipasi dalam proses rekrutmen pegawai negeri yang meritokrasi dan
-                        berkeadilan.
+                        Selamat datang di Sistem Informasi Seleksi Sumber Daya Manusia (SDM) Desa Kabupaten Gianyar. Daftarkan diri Anda untuk berpartisipasi dalam proses seleksi SDM Desa yang transparan dan akuntabel.
                     </p>
 
                     <div class="relative mt-10">
