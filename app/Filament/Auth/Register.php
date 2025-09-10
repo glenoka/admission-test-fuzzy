@@ -82,7 +82,10 @@ class Register extends AuthRegister
                         ->maxLength(16)
                         ->minLength(16)
                         ->numeric()
-                        ->unique(Participant::class, 'nik', ignoreRecord: true),
+                        ->unique(Participant::class, 'nik', ignoreRecord: true)
+                         ->live(onBlur: false) // supaya update realtime saat diketik
+   ->hint(fn ($state) => strlen($state) . '/16 karakter')
+->hintColor(fn ($state) => strlen($state) < 16 ? 'danger' : 'success'),
                     TextInput::make('place_of_birth')->required(),
                     DatePicker::make('date_of_birth'),
                     Select::make('gender')->required()
