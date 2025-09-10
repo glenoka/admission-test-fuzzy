@@ -7,27 +7,17 @@
                 <img src="{{ asset('images/logo_pemkab.png') }}" width="80px" class="inline-block dark:hidden" alt="Logo Pemkab">
                 <img src="{{ asset('images/logo_pemkab.png') }}" class="hidden dark:inline-block" alt="Logo Pemkab">
                 <div class="ml-3">
-                    <div class="text-xl font-bold text-gray-800">SIMADE GIANYAR</div>
-                    <div class="text-sm text-gray-600">Kabupaten Gianyar</div>
+                    <div class="text-xl font-bold text-gray-800 ">SIMADE GIANYAR</div>
+                    <div class="text-sm text-gray-600 ">Kabupaten Gianyar</div>
                 </div>
             </a>
         </div>
 
-        <!-- Navbar Right Icons -->
         <div class="nav-icons flex items-center lg_992:order-2 ms-auto">
-            <!-- Login Button -->
-          <a href="/admin" 
-   class="px-5 py-2 rounded-full border border-orange-600 text-orange-600 bg-orange-600/5 
-          hover:bg-orange-600 hover:text-white hover:border-orange-600 transition-all shadow-sm">
-    Login
-</a>
-
-
-
-            <!-- Navbar Collapse Menu Button (Mobile) -->
-            <button data-collapse="menu-collapse" type="button" 
-                class="collapse-btn inline-flex items-center ms-3 text-dark dark:text-white lg_992:hidden" 
-                aria-controls="menu-collapse" aria-expanded="false">
+            <!-- Navbar Button -->
+           
+            <!-- Navbar Collapse Manu Button -->
+            <button data-collapse="menu-collapse" type="button" class="collapse-btn inline-flex items-center ms-3 text-dark dark:text-white lg_992:hidden" aria-controls="menu-collapse" aria-expanded="false">
                 <span class="sr-only">Navigation Menu</span>
                 <i class="mdi mdi-menu mdi-24px"></i>
             </button>
